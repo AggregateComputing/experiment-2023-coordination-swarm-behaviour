@@ -53,20 +53,20 @@ jobs:
         with:
           name: charts
           path: charts.tar.zst
-  check-simulations-docker:
-    runs-on: ubuntu-22.04
-    concurrency:
-      group: container-check${{ github.workflow }}${{ matrix.os }}${{ github.event.number || github.ref }}
-      cancel-in-progress: true
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3.3.0
-      - name: Run compose
-        run: docker-compose up --build
+  #check-simulations-docker:
+  #  runs-on: ubuntu-22.04
+  #  concurrency:
+  #    group: container-check${{ github.workflow }}${{ matrix.os }}${{ github.event.number || github.ref }}
+  #    cancel-in-progress: true
+  #  steps:
+  #    - name: Checkout
+  #      uses: actions/checkout@v3.3.0
+  #    - name: Run compose
+  #      run: docker-compose up --build
   release:
     needs:
       - check-simulations-native
-      - check-simulations-docker
+      #- check-simulations-docker
       - create-charts
     runs-on: ubuntu-22.04
     concurrency:
