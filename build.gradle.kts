@@ -94,3 +94,4 @@ File(rootProject.rootDir.path + "/src/main/yaml").listFiles()
         }
         runAllBatch.dependsOn(batch)
     }
+
