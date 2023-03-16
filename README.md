@@ -32,8 +32,13 @@ The examples are located in the [src/main/scala/examples](src/main/scala/example
 Each example has an associated yaml file, which contains the configuration for the Alchemist simulation.
 In the following we briefly describe how to run each example and what it is the expected result.
 
+<details>
+  <summary>Constant movement</summary>
+
 | Example | Description | Command |
 |--------| --- | --- |
 | [src/main/scala/examples/ConstantMovement](src/main/scala/examples/ConstantMovement) | A swarm of agents moving in a straight line | `./gradlew runConstantMovementGraphic` |
 
 <img width=100% src="https://user-images.githubusercontent.com/23448811/224010877-6f5c9d36-d348-4343-8b66-19f78778297e.gif">
+
+</details>
