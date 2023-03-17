@@ -144,3 +144,9 @@ For enabling the trace, follow the following video:
 </p>
 
 </details>
+
+For other examples, please refer to the [examples](src/main/yaml) folder. For each file, you can run the corresponding example with the following command:
+
+```bash
+./gradlew run<ExampleName>Graphic
+```
