@@ -125,7 +125,19 @@ For enabling the trace, follow the following video:
 
 | Example | Description                                                        | Command                             |
 |--------|--------------------------------------------------------------------|-------------------------------------|
-| [src/main/scala/examples/BranchingExample](src/main/scala/examples/BranchingExample) | A swarm that create several sub-swarm based on spatial constraints | `./gradlew runTeamFormationGraphic` |
+| [src/main/scala/examples/TeamFormation](src/main/scala/examples/TeamFormation) | A swarm that create several sub-swarm based on spatial constraints | `./gradlew runTeamFormationGraphic` |
+
+<p align="center">
+    <img width=80% src="https://user-images.githubusercontent.com/23448811/225940078-2b28543c-dd0c-4b0b-9442-0edcfdc13a2f.gif">
+</p>
+
+</details>
+<details>
+  <summary>Shape Formation</summary>
+
+| Example | Description                               | Command                        |
+|--------|-------------------------------------------|--------------------------------|
+| [src/main/scala/examples/AllShape](src/main/scala/examples/AllShape) | A swarm of nodes that form several shapes | `./gradlew runAllShapeGraphic` |
 
 <p align="center">
     <img width=80% src="https://user-images.githubusercontent.com/23448811/225940078-2b28543c-dd0c-4b0b-9442-0edcfdc13a2f.gif">
