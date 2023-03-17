@@ -33,17 +33,18 @@ Each example has an associated yaml file, which contains the configuration for t
 In the following we briefly describe how to run each example and what it is the expected result.
 
 For enabling the trace, follow the following video:
-![example-enable-tracking](https://user-images.githubusercontent.com/23448811/225930534-7074d1ea-c79d-401b-835c-31d9a0961ddb.gif)
-
+<p align="center">
+<img width=50% src="https://user-images.githubusercontent.com/23448811/225930534-7074d1ea-c79d-401b-835c-31d9a0961ddb.gif">
+</p>
 <details>
   <summary>Constant movement</summary>
 
 | Example | Description | Command |
 |--------| --- | --- |
 | [src/main/scala/examples/ConstantMovement](src/main/scala/examples/ConstantMovement) | A swarm of agents moving in a straight line | `./gradlew runConstantMovementGraphic` |
-
-<img width=100% src="https://user-images.githubusercontent.com/23448811/224010877-6f5c9d36-d348-4343-8b66-19f78778297e.gif">
-
+<p align="center">
+    <img width=80% src="https://user-images.githubusercontent.com/23448811/224010877-6f5c9d36-d348-4343-8b66-19f78778297e.gif">
+</p>
 </details>
 
 <details>
@@ -53,8 +54,9 @@ For enabling the trace, follow the following video:
 |--------|------------------------------------------| --- |
 | [src/main/scala/examples/Explore](src/main/scala/examples/Explore) | A swarm of agents exploring a fixed area | `./gradlew runConstantMovementGraphic` |
 
-<img width=100% src="https://user-images.githubusercontent.com/23448811/224011009-411449cb-2b8e-4ebf-bc00-6fa8ba7a9120.gif">
-
+<p align="center">
+    <img width=80% src="https://user-images.githubusercontent.com/23448811/224011009-411449cb-2b8e-4ebf-bc00-6fa8ba7a9120.gif">
+</p>
 </details>
 
 <details>
@@ -64,8 +66,9 @@ For enabling the trace, follow the following video:
 |--------|-------------------------------------|-------------------------------------------------------------------------------------------------|
 | [src/main/scala/examples/ObstacleAvoidance](src/main/scala/examples/ObstacleAvoidance) | A swarm that try to avoid obstacles | `./gradlew runObstacleAvoidanceBigGraphic` or `./gradlew runObstacleAvoidanceMiddleGraphic` or `./gradlew runObstacleAvoidanceGraphic` |
 
-<img width=100% src="https://user-images.githubusercontent.com/23448811/224012332-290c81e1-effa-4cab-ae03-c603c116dd99.gif">
-
+<p align="center">
+    <img width=80% src="https://user-images.githubusercontent.com/23448811/224012332-290c81e1-effa-4cab-ae03-c603c116dd99.gif">
+</p>
 </details>
 
 <details>
@@ -75,8 +78,9 @@ For enabling the trace, follow the following video:
 |--------|------------------------------------------|-------------------------------------|
 | [src/main/scala/examples/TowardsLeader](src/main/scala/examples/TowardsLeader) | Nodes go towards a sink point (a leader) | `./gradlew runTowardsLeaderGraphic` |
 
-<img width=100% src="https://user-images.githubusercontent.com/23448811/225931657-d0244288-cb74-491a-b27a-610e9bef70cc.gif">
-
+<p align="center">
+    <img width=80% src="https://user-images.githubusercontent.com/23448811/225931657-d0244288-cb74-491a-b27a-610e9bef70cc.gif">
+</p>
 </details>
 
 <details>
@@ -86,11 +90,10 @@ For enabling the trace, follow the following video:
 |--------|---------------------------|----------------------------------|
 | [src/main/scala/examples/BranchingExample](src/main/scala/examples/BranchingExample) | Nodes spin aroud a leader | `./gradlew runSpinAroundGraphic` |
 
-<img width=100% src="https://user-images.githubusercontent.com/23448811/224012411-fbef5948-c546-49fa-b411-f5662831ef1b.gif">
-
-
+<p align="center">
+    <img width=80% src="https://user-images.githubusercontent.com/23448811/224012411-fbef5948-c546-49fa-b411-f5662831ef1b.gif">
+</p>
 </details>
-
 
 <details>
   <summary>Reynolds Flocking</summary>
@@ -99,10 +102,10 @@ For enabling the trace, follow the following video:
 |--------|--------------------------------------|------------------------------------|
 | [src/main/scala/examples/ReynoldFlock](src/main/scala/examples/ReynoldFlock) | Swarm moving following reynolds rule | `./gradlew runReynoldFlockGraphic` |
 
-<img width=100% src="https://user-images.githubusercontent.com/23448811/224012578-d375de46-23c3-44e6-99cf-9d937548a1a5.gif">
-
+<p align="center">
+    <img width=80% src="https://user-images.githubusercontent.com/23448811/224012578-d375de46-23c3-44e6-99cf-9d937548a1a5.gif">
+</p>
 </details>
-
 
 <details>
   <summary>Team Formation (branching)</summary>
@@ -111,6 +114,21 @@ For enabling the trace, follow the following video:
 |--------|------------------------------------------|----------------------------------------|
 | [src/main/scala/examples/BranchingExample](src/main/scala/examples/BranchingExample) | Example of team formation through branch | `./gradlew runBranchingExampleGraphic` |
 
-<img width=100% src="https://user-images.githubusercontent.com/23448811/224012578-d375de46-23c3-44e6-99cf-9d937548a1a5.gif">
+<p align="center">
+    <img width=80% src="https://user-images.githubusercontent.com/23448811/224010942-178aea25-0fde-4bdd-b0e9-59709640cc30.gif">
+</p>
+
+</details>
+
+<details>
+  <summary>Team Formation (logical)</summary>
+
+| Example | Description                                                        | Command                             |
+|--------|--------------------------------------------------------------------|-------------------------------------|
+| [src/main/scala/examples/BranchingExample](src/main/scala/examples/BranchingExample) | A swarm that create several sub-swarm based on spatial constraints | `./gradlew runTeamFormationGraphic` |
+
+<p align="center">
+    <img width=80% src="https://user-images.githubusercontent.com/23448811/225940078-2b28543c-dd0c-4b0b-9442-0edcfdc13a2f.gif">
+</p>
 
 </details>
