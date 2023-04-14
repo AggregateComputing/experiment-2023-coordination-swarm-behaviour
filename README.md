@@ -169,6 +169,17 @@ a [0, 50] minutes (simulated) timeframe.
 Each simulation run lasts 90 minutes, during which we expect the number of alarm situations to reach a minimum value
 
 For more details, please refer to the companion paper.
+For seeing the dynamics of the simulation, you can run the following command:
+
+```bash
+./gradlew runRescueGraphic
+````
+
+In the following there is a sequence of screenshots of the simulation:
+
+<img width=32% src="https://user-images.githubusercontent.com/23448811/232057651-42a7edfe-c812-4b92-9ec9-9f899d56b90e.png">
+<img width=32% src="https://user-images.githubusercontent.com/23448811/232057757-d0410536-f379-4675-8bfd-a6bf15e3cb19.png">
+<img width=32% src="https://user-images.githubusercontent.com/23448811/232057379-1efacf38-04cb-4f77-9744-a2e72746fdc4.png">
 
 #### Reproduce the results
 To reproduce the results of the paper, you can run the following command:
