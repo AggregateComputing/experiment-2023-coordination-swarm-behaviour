@@ -183,4 +183,8 @@ so you can directly run the following command to generate the plots:
 pip install -r requirements.txt
 python plotter.py
 ```
-The results are the following:
+This will produce the following charts stored in charts/:
+
+<img width=32% src="https://user-images.githubusercontent.com/23448811/232056242-7152346b-e6e7-4eb6-b8a9-c72c3cd6ada1.png">
+<img width=32% src="https://user-images.githubusercontent.com/23448811/232056530-c6b14064-b1d5-4a38-8642-dc6d2be063ec.png">
+<img width=32% src="https://user-images.githubusercontent.com/23448811/232056744-8b04d3d7-2430-454e-bdce-498ddb347069.png">
