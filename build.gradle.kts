@@ -64,6 +64,7 @@ File(rootProject.rootDir.path + "/src/main/yaml").listFiles()
             description = "Launches graphic simulation ${it.nameWithoutExtension}"
             mainClass.set("it.unibo.alchemist.Alchemist")
             classpath = sourceSets["main"].runtimeClasspath
+            jvmArgs("-Dsun.java2d.opengl=false")
             args("-y", it.absolutePath)
             if (System.getenv("CI") == "true") {
                 args("-hl", "-t", "2")
