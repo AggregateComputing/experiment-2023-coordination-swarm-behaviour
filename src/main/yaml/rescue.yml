@@ -3,7 +3,7 @@ incarnation: scafi
 variables:
   random: &random
     min: 0
-    max: 11
+    max: 63
     step: 1
     default: 2
   range: &range

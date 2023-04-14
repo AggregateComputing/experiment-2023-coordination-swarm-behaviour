@@ -346,17 +346,16 @@ if __name__ == '__main__':
         return (fig, ax)
 
     def produce_chart(means, error, label, palette=palette):
-
         sns.set_palette(palette)
         plot_label = unit_for(label)
-        data = pd.DataFrame({'time (minutes)': current_experiment_means['time'] / 60, plot_label: current_experiment_means[label], "y-error": current_experiment_errors[label]})
+        data = pd.DataFrame({'time (minutes)': means['time'] / 60, plot_label: means[label], "y-error": error[label]})
         lower_bound = data.copy()
         upper_bound = data.copy()
         all_data = data.copy()
         upper_bound[plot_label] = upper_bound[plot_label] - upper_bound['y-error']
         lower_bound[plot_label] = lower_bound[plot_label] - lower_bound['y-error']
         reference = all_data.append(upper_bound).append(lower_bound)
-        return sns.lineplot(x='time (minutes)', y=plot_label, data=reference)
+        return sns.lineplot(x='time (minutes)', y=plot_label, data=reference.reset_index())
     
     def finalise_fig(ax, name):
         fig = ax.figure

@@ -15,8 +15,8 @@
 
 Macro Swarm is a field-based libraries for expressing swarm behaviors in a declarative way.
 It is built on top of the Aggregate computing framework, which is a distributed computing framework for the JVM.
-Particularly, it is built of top of [ScaFi](), a scala library for programming aggregate computing systems. 
-The following simulation are built on top of [Alchemist]() -- a meta-simulator for pervasive like systems.
+Particularly, it is built of top of [ScaFi](https://scafi.github.io/), a scala library for programming aggregate computing systems. 
+The following simulation are built on top of [Alchemist](http://alchemistsimulator.github.io/) -- a meta-simulator for pervasive like systems.
 
 This is the companion repository for the paper sent at COORDINATION 2023 entitled: 
 *MacroSwarm: a Field-based Compositional Framework for Swarm Programming*
@@ -36,6 +36,8 @@ For enabling the trace, follow the following video:
 <p align="center">
 <img width=50% src="https://user-images.githubusercontent.com/23448811/225930534-7074d1ea-c79d-401b-835c-31d9a0961ddb.gif">
 </p>
+
+
 <details>
   <summary>Constant movement</summary>
 
@@ -150,3 +152,35 @@ For other examples, please refer to the [examples](src/main/yaml) folder. For ea
 ```bash
 ./gradlew run<ExampleName>Graphic
 ```
+
+### Simulation: Find and Rescue
+With this API, we propose a use case study highlighting the ability of MacroSwarm to express complex
+swarm behaviors. In our scenario, we want a fleet of drones to patrol a spatial
+area of 1km^2. In this environment, dangerous situations may arise (e.g., a fire
+breaks out, a person gets injured, etc.). 
+In response to these situations, a drone
+designated as a healer must approach the danger and resolve it. 
+Exploration must be carried out in groups composed of at least one healer and several explorers,
+who will help the healer identify alarm situations. 
+Initially, 50 explorers and 5 healers are randomly positioned in this area. Each drone has a maximum speed
+of approximately 20 km/h and a communication range of 100 meters. The alarm
+situations are randomly generated at different times within the spatial area in
+a [0, 50] minutes (simulated) timeframe. 
+Each simulation run lasts 90 minutes, during which we expect the number of alarm situations to reach a minimum value
+
+For more details, please refer to the companion paper.
+
+#### Reproduce the results
+To reproduce the results of the paper, you can run the following command:
+
+```bash
+./gradlew runRescueBatch
+```
+This will launch 64 simulations with different seeds. Each of them, will produce a csv file in the `data` folder.
+In this repository, the data is already loaded, 
+so you can directly run the following command to generate the plots:
+```bash
+pip install -r requirements.txt
+python plotter.py
+```
+The results are the following:
