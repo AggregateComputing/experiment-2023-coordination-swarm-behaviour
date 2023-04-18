@@ -192,7 +192,7 @@ In this repository, the data is already loaded,
 so you can directly run the following command to generate the plots:
 ```bash
 pip install -r requirements.txt
-python plotter.py
+python process.py
 ```
 This will produce the following charts stored in charts/:
 
