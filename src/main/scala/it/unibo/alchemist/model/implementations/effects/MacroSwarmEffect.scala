@@ -16,7 +16,7 @@ import java.awt.geom._
 /** ad-hoc effect to draw drones, animal and station. */
 class MacroSwarmEffect extends Effect {
   @ExportForGUI(nameToExport = "Track")
-  private val trackEnabled: Boolean = false
+  private val trackEnabled: Boolean = true
 
   @ExportForGUI(nameToExport = "SnapshotSize")
   val snapshotSize: RangedInteger = new RangedInteger(10, MAX_LENGTH, LENGTH)
