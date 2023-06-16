@@ -59,7 +59,7 @@ class RescueScenario extends BaseMovement {
     Point3D.Zero
   }
 
-  def healed(danger: Boolean): Boolean = !danger
+  def healed(): Boolean = true //!danger
 
   def formation(leading: Boolean): Point3D =
     centeredCircle(leading, circleRadius, confidence, Point3D.Zero)
@@ -67,8 +67,10 @@ class RescueScenario extends BaseMovement {
   def wanderInFormation(leading: Boolean): Point3D =
     centeredCircle(leading, circleRadius, confidence, explore(Point3D.Zero, bound, 1))
 
-  def goToHealInFormation(leading: Boolean, target: Point3D): Point3D =
+  def goToHealInFormation(leading: Boolean, target: Point3D): Point3D = {
+    node.put("target", target)
     centeredCircle(leading, circleRadius, confidence, goto(target))
+  }
 
   def circleOk(leading: Boolean): Boolean = isCircleFormed(leading, circleRadius, confidence * 2)
 
@@ -78,15 +80,18 @@ class RescueScenario extends BaseMovement {
       val potential = fastGradient(leading, nbrRange)
       val inDanger =
         C[Double, Option[Point3D]](potential, nearestPointFromOption, inDangerDirection, None).getOrElse(Point3D.Zero)
+      node.put("inDanger", inDanger)
       val dangerFound = broadcast(leading, Point3D.Zero != inDanger)
+
       val dangerReached = broadcast(leading, isClose(inDanger))
+      val toHeal = dangerReached && dangerFound
       val circleIsFormed = circleOk(leading)
       execute
         .repeat(
           plan(formation(leading)).endWhen(circleIsFormed),
           plan(wanderInFormation(leading)).endWhen(dangerFound),
           plan(goToHealInFormation(leading, inDanger)).endWhen(dangerReached),
-          plan(heal(k, inDanger)).endWhen(healed(dangerFound))
+          plan(heal(k, inDanger)).endWhen(healed)
         )
         .run()
     }
@@ -94,7 +99,7 @@ class RescueScenario extends BaseMovement {
     val team = createTeam
     val velocity = rep(Point3D.Zero) { old =>
       insideTeamPlanning(team) +
-        separation(old, OneHopNeighbourhoodWithinRange(2)).normalize
+        separation(old, OneHopNeighbourhoodWithinRange(5)).normalize
     }
 
     val distancesIntraTeam = excludingSelf

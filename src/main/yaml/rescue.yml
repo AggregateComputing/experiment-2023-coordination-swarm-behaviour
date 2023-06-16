@@ -5,7 +5,7 @@ variables:
     min: 0
     max: 63
     step: 1
-    default: 2
+    default: 10
   range: &range
     formula: 100
 

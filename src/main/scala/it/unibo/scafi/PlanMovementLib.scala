@@ -45,6 +45,7 @@ trait PlanMovementLib {
         )*/
         // val conditions = plans.map(_.condition())
         // val velocities = plans.map(_.computation())
+
         node.put("planId", planId)
         branch(plans.length > planId) {
           val conditions = plans.map(_.condition())
