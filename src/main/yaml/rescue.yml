@@ -4,8 +4,8 @@ variables:
   random: &random
     min: 0
     max: 63
-    step: 1
-    default: 10
+    step: 10
+    default: 20
   range: &range
     formula: 100
 
@@ -67,6 +67,27 @@ deployments:
         concentration: true
       - molecule: team
         concentration: -1
+  - type: Point
+    parameters: [ 500, 500 ]
+    programs:
+      - *program
+    contents:
+      - molecule: obstacle
+        concentration: true
+  - type: Point
+    parameters: [ 200, 200 ]
+    programs:
+      - *program
+    contents:
+      - molecule: obstacle
+        concentration: true
+  - type: Point
+    parameters: [ 800, 800 ]
+    programs:
+      - *program
+    contents:
+      - molecule: obstacle
+        concentration: true
 export:
   - type: SnapshotExporter
     parameters: [ "snapshots", "rescue", 10, 10 ]

@@ -12,13 +12,16 @@ import scala.jdk.CollectionConverters.IterableHasAsScala
 
 class RescueScenario extends BaseMovement {
   private lazy val manager = node.asInstanceOf[SimpleNodeManager[Any]]
+
   def healer: Boolean = node.get[Boolean]("healer")
+
   val bound = Point3D(1000, 1000, 0)
   val circleRadius = 50
   val minimumDistance = 20
   val viewRadius = 100
   val confidence = 5
   val healingTime = 10
+
   def createTeam = teamFormation(
     healer,
     minimumDistance,
@@ -59,7 +62,7 @@ class RescueScenario extends BaseMovement {
     Point3D.Zero
   }
 
-  def healed(): Boolean = true //!danger
+  def healed(): Boolean = true // !danger
 
   def formation(leading: Boolean): Point3D =
     centeredCircle(leading, circleRadius, confidence, Point3D.Zero)
@@ -84,7 +87,7 @@ class RescueScenario extends BaseMovement {
       val dangerFound = broadcast(leading, Point3D.Zero != inDanger)
 
       val dangerReached = broadcast(leading, isClose(inDanger))
-      val toHeal = dangerReached && dangerFound
+      //val toHeal = dangerReached && dangerFound
       val circleIsFormed = circleOk(leading)
       execute
         .repeat(
@@ -93,27 +96,34 @@ class RescueScenario extends BaseMovement {
           plan(goToHealInFormation(leading, inDanger)).endWhen(dangerReached),
           plan(heal(k, inDanger)).endWhen(healed)
         )
-        .run()
+        .run(leading)
     }
+
   override protected def movementLogic(): Point3D = {
-    val team = createTeam
-    val velocity = rep(Point3D.Zero) { old =>
-      insideTeamPlanning(team) +
-        separation(old, OneHopNeighbourhoodWithinRange(5)).normalize
-    }
+    val obstacles = excludingSelf.reifyField((nbr(node.getOption[Boolean]("obstacle").isDefined), nbrVector()))
+    val obstaclesPerceived = obstacles.filter(_._2._1).values.map(_._2).toSeq
+    branch(node.getOption("obstacle").isDefined) {
+      Point3D.Zero
+    } {
+      val team = createTeam
+      val velocity = rep(Point3D.Zero) { old =>
+        insideTeamPlanning(team) +
+          separation(old, OneHopNeighbourhoodWithinRange(5)).normalize
+      } +
+        obstacleAvoidance(obstaclesPerceived, 70, 50)
+      val distancesIntraTeam = excludingSelf
+        .reifyField((nbrRange(), nbr(sense[Int]("team"))))
+        .filter(_._2._2 == mid())
+        .values
+        .map(_._1)
 
-    val distancesIntraTeam = excludingSelf
-      .reifyField((nbrRange(), nbr(sense[Int]("team"))))
-      .filter(_._2._2 == mid())
-      .values
-      .map(_._1)
-
-    if (healer) {
-      node.put("avgDistanceTeam", distancesIntraTeam.sum / distancesIntraTeam.size)
+      if (healer) {
+        node.put("avgDistanceTeam", distancesIntraTeam.sum / distancesIntraTeam.size)
+      }
+      val minDistance = excludingSelf.reifyField(nbrRange()).minOption.map(_._2).getOrElse(Double.PositiveInfinity)
+      node.put("minDistance", minDistance)
+      mux(healer)(velocity)(velocity * 2)
     }
-    val minDistance = excludingSelf.reifyField(nbrRange()).minOption.map(_._2).getOrElse(Double.PositiveInfinity)
-    node.put("minDistance", minDistance)
-    mux(healer)(velocity)(velocity * 2)
   }
 
   private def nearestPointFromOption(left: Option[Point3D], right: Option[Point3D]): Option[Point3D] =
