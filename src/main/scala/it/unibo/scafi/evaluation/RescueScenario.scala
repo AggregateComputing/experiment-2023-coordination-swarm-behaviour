@@ -4,13 +4,13 @@ import it.unibo.alchemist.model.implementations.molecules
 import it.unibo.alchemist.model.implementations.molecules.SimpleMolecule
 import it.unibo.alchemist.model.implementations.nodes.SimpleNodeManager
 import it.unibo.alchemist.model.scafi.ScafiIncarnationForAlchemist.ID
-import it.unibo.scafi.examples.BaseMovement
+import it.unibo.scafi.examples.{BaseMovement, BaseMovementNew}
 import it.unibo.scafi.space.Point3D
 import it.unibo.scafi.space.pimp.PimpPoint3D
 
 import scala.jdk.CollectionConverters.IterableHasAsScala
 
-class RescueScenario extends BaseMovement {
+class RescueScenario extends BaseMovementNew {
   private lazy val manager = node.asInstanceOf[SimpleNodeManager[Any]]
 
   def healer: Boolean = node.get[Boolean]("healer")

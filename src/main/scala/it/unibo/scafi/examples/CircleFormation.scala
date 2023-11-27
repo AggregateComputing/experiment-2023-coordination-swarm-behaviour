@@ -5,7 +5,7 @@ import it.unibo.scafi.space.pimp.PimpPoint3D
 
 import scala.language.postfixOps
 
-class CircleFormation extends BaseMovement {
+class CircleFormation extends BaseMovementNew {
   override protected def movementLogic(): Point3D = {
     val leader = mid() == 1
     val targetRange = 150

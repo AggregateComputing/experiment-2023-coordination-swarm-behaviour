@@ -15,6 +15,7 @@ repositories {
 dependencies {
     // Check the catalog at gradle/libs.versions.gradle
     implementation(libs.bundles.alchemist)
+    implementation("it.unibo.scafi:macro-swarm-core_2.13:1.2.0")
 }
 
 multiJvm {
