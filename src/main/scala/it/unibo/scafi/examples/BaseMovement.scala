@@ -2,20 +2,9 @@ package it.unibo.scafi.examples
 
 import it.unibo.alchemist.model.interfaces.Position
 import it.unibo.alchemist.model.scafi.ScafiIncarnationForAlchemist.ScafiAlchemistSupport
-import it.unibo.alchemist.model.scafi.ScafiIncarnationForAlchemist._
+import it.unibo.scafi.macroswarm.MacroSwarmAlchemistSupport._
+import it.unibo.scafi.macroswarm.MacroSwarmAlchemistSupport.incarnation._
 import it.unibo.scafi.space.Point3D
-import it.unibo.scafi.{
-  BaseMovementLib,
-  BlocksWithShare,
-  FlockLib,
-  GPSMovement,
-  LeaderBasedLib,
-  PatternFormationLib,
-  PlanMovementLib,
-  ProcessFix,
-  TeamFormationLib
-}
-
 trait BaseMovement
     extends AggregateProgram
     with BaseMovementLib

@@ -6,7 +6,7 @@ import it.unibo.scafi.space.pimp.PimpPoint3D
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
-class VFormation extends BaseMovementNew {
+class VFormation extends BaseMovement {
   override protected def movementLogic(): Point3D = {
     rep(Point3D(0, 0.1, 0))(v =>
       {

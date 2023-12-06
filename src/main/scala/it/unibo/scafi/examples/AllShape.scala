@@ -6,7 +6,7 @@ import it.unibo.scafi.space.pimp.PimpPoint3D
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
-class AllShape extends BaseMovementNew {
+class AllShape extends BaseMovement {
   val (linePattern, circlePattern, vPattern, cohesionPattern) = (0, 20, 40, 45)
   def source = List(linePattern, circlePattern, vPattern, cohesionPattern).contains(mid())
   override protected def movementLogic(): Point3D = {

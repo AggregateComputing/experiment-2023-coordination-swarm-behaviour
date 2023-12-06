@@ -5,7 +5,7 @@ import it.unibo.scafi.space.pimp.PimpPoint3D
 
 import scala.language.postfixOps
 
-class VFormationAndObstacle extends BaseMovementNew {
+class VFormationAndObstacle extends BaseMovement {
   def obstacle: Seq[Point3D] = {
     val deltaVector = Point3D(-200, 200, 0) - currentPosition()
     Seq(deltaVector)

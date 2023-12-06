@@ -5,6 +5,6 @@ import it.unibo.scafi.space.pimp.PimpPoint3D
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
-class RandomMovement extends BaseMovementNew {
+class RandomMovement extends BaseMovement {
   override protected def movementLogic(): Point3D = maintainTrajectory(brownian().normalize)(100 seconds)
 }
