@@ -133,4 +133,10 @@ class RescueScenario extends BaseMovement {
       case (None, Some(r)) => Some(r)
       case (None, None) => None
     }
+
+  private def countIn(source: Boolean): Int = {
+    val potential = fastGradient(source, nbrRange)
+    val count = CWithShare[Double, Int](potential, _ + _, 1, 0)
+    broadcastAlongWithShare(potential, count, nbrRange)
+  }
 }
