@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/23448811/223975084-0bcc70fd-fdab-4ba9-a0ab-2f10f595e582.png">
+  <img width=50% src="https://github.com/scafi/macro-swarm/assets/23448811/7b1a7e25-73b9-42b7-b9d0-549b1a0289ea">
 </p>
 
 <p align="center">
