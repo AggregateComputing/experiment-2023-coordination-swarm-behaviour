@@ -10,6 +10,8 @@ variables:
     formula: 350
   circle: &circle
     formula: range / 2
+  leader: &leader
+    formula: 24
 
 _constants:
   grain: &grain 500.0
@@ -35,7 +37,7 @@ _reactions:
       type: Event
       actions:
         - type: RunScafiProgram
-          parameters: [it.unibo.scafi.evaluation.LineFormation, *retentionTime]
+          parameters: [it.unibo.scafi.evaluation.VPatternFormation, *retentionTime]
     - program: send
   - move: &move
     - time-distribution:
@@ -55,13 +57,25 @@ deployments:
     concentration: *grain
   - molecule: circle
     concentration: *circle
+  - molecule: angleFactor
+    concentration: 3.0
+  - molecule: leader
+    concentration: *leader
 
+export:
+  - type: PositionExporter
+    parameters: [ "data/positions", "vEval30", 5 ]
+    data: []
+  - type: CSVExporter
+    parameters:
+      exportPath: "data"
+      fileNameRoot: "vEval30"
+      interval: 1.0
+    data:
+      - time
+      - type: AngleExtractor
+        parameters: [ *leader ]
 
 terminate:
   - type: AfterTime
     parameters: 2700
-
-export:
-  - type: PositionExporter
-    parameters: [ "data/positions", "lineEval", 5 ]
-    data: []

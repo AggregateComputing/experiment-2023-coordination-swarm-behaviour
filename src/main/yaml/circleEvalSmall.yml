@@ -7,9 +7,9 @@ variables:
     step: 1
     default: 2
   range: &range
-    formula: 350
+    formula: 250.0
   circle: &circle
-    formula: range / 2
+    formula: range / 3.0
 
 _constants:
   grain: &grain 500.0
@@ -35,7 +35,7 @@ _reactions:
       type: Event
       actions:
         - type: RunScafiProgram
-          parameters: [it.unibo.scafi.evaluation.LineFormation, *retentionTime]
+          parameters: [it.unibo.scafi.evaluation.CircleFormation, *retentionTime]
     - program: send
   - move: &move
     - time-distribution:
@@ -56,12 +56,12 @@ deployments:
   - molecule: circle
     concentration: *circle
 
+export:
+  - type: PositionExporter
+    parameters: [ "data/positions", "circleEvalSmall", 5 ]
+    data: []
+
 
 terminate:
   - type: AfterTime
     parameters: 2700
-
-export:
-  - type: PositionExporter
-    parameters: [ "data/positions", "lineEval", 5 ]
-    data: []
