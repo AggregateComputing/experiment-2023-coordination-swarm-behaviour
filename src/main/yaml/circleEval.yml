@@ -10,6 +10,8 @@ variables:
     formula: 250.0
   circle: &circle
     formula: range / 2.0
+  leader: &leader
+    formula: 24
 
 _constants:
   grain: &grain 500.0
@@ -55,12 +57,22 @@ deployments:
     concentration: *grain
   - molecule: circle
     concentration: *circle
+  - molecule: leader
+    concentration: *leader
 
 export:
   - type: PositionExporter
     parameters: [ "data/positions", "circleEval", 5 ]
     data: []
-
+  - type: CSVExporter
+    parameters:
+      exportPath: "data"
+      fileNameRoot: "circleEvalLarge"
+      interval: 1.0
+    data:
+      - time
+      - type: DistanceFromCenterExtractor
+        parameters: [ *leader ]
 
 terminate:
   - type: AfterTime

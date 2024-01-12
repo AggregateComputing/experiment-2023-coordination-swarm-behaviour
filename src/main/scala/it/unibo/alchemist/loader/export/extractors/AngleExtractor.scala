@@ -8,8 +8,7 @@ import java.util
 import scala.jdk.CollectionConverters.ListHasAsScala
 
 class AngleExtractor(val centerId: Int) extends Extractor[Double] {
-  override def getColumnNames: util.List[String] = util.List.of("angle")
-
+  override def getColumnNames: util.List[String] = util.List.of("angle[mean]", "angle[std]")
   override def extractData[T](
       environment: Environment[T, _],
       actionable: Actionable[T],
@@ -28,6 +27,9 @@ class AngleExtractor(val centerId: Int) extends Extractor[Double] {
       Math.atan2(y, x)
     })
     val (left, right) = angles.map(Math.toDegrees).map(_ * -1).span(_ < 90)
-    java.util.Map.of("angle", (left ++ right.map(180 - _)).sum / angles.size)
+    val fixedAngles = (left ++ right.map(180 - _))
+    val mean = fixedAngles.sum / angles.size
+    val std = Math.sqrt(fixedAngles.map(a => Math.pow(a - mean, 2)).sum / angles.size)
+    java.util.Map.of("angle[mean]", mean, "angle[std]", std)
   }
 }

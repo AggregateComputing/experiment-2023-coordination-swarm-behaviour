@@ -8,8 +8,6 @@ variables:
     default: 2
   range: &range
     formula: 350
-  circle: &circle
-    formula: range / 2
   leader: &leader
     formula: 24
 
@@ -55,8 +53,6 @@ deployments:
   contents:
   - molecule: grain
     concentration: *grain
-  - molecule: circle
-    concentration: *circle
   - molecule: angleFactor
     concentration: 3.0
   - molecule: leader
