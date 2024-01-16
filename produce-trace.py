@@ -1,5 +1,4 @@
 # Adjusting the plotting code to use lighter colors for older values
-
 import numpy as np
 import json
 import matplotlib.pyplot as plt
@@ -14,7 +13,8 @@ path = sys.argv[1]
 
 # Get all files from the folder
 files = glob.glob(os.path.join(path, "*.json"))
-
+# Store in "charts" folder
+charts_folder = os.path.basename("charts")
 # Create a map that contains the experiment name and a list of the file. Given a file <experiment>-data-1.json, the key will be "experiment" and the value will be a list with the file experiment-data-1.json
 files_map = {}
 for file in files:
@@ -33,7 +33,8 @@ for file in files:
         else:
             files_map[experiment_name] = [json_data]
 
-def plot_experiment(experiment, crop=500):
+
+def plot_experiment(experiment_name, experiment, crop=500):
     # Initialize the plot
     plt.figure(figsize=(10, 10))
 
@@ -74,7 +75,7 @@ def plot_experiment(experiment, crop=500):
     ## tigh layout
     plt.tight_layout()
     # Show the plot
-    plt.show()
+    plt.savefig(os.path.join(charts_folder, experiment_name + ".pdf"))
 
 
 def average_experiments(experiments):
@@ -90,7 +91,7 @@ def average_experiments(experiments):
         average[drone_id] = positions / len(experiments)
     return average
 
+
 for experiment_name, experiments in files_map.items():
     print("Plotting experiment", experiment_name)
-    plot_experiment(average_experiments(experiments))
-
+    plot_experiment(experiment_name, average_experiments(experiments))
