@@ -6,7 +6,7 @@ import it.unibo.scafi.space.pimp._
 
 class LeaderBasedSeparation extends BaseMovement {
   val id = 24
-  def range: java.lang.Double = 60
+  def range: java.lang.Double = sense("separation")
   override protected def movementLogic(): Point3D = {
     //val distances = OneHopNeighbourhoodWithinRange(range).query[Double, Double](0.0, 0.0, _ + nbrRange())
     //println(distances)

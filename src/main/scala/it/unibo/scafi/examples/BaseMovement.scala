@@ -21,6 +21,7 @@ trait BaseMovement
     with LeaderBasedLib
     with PlanMovementLib
     with BlockS
+    with ConsensusLib
     with PatternFormationLib
     with TeamFormationLib {
 

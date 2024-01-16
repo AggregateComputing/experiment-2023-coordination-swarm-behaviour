@@ -15,7 +15,7 @@ repositories {
 dependencies {
     // Check the catalog at gradle/libs.versions.gradle
     implementation(libs.bundles.alchemist)
-    implementation("it.unibo.scafi:macro-swarm-core_2.13:1.2.14")
+    implementation("it.unibo.scafi:macro-swarm-core_2.13:1.5.0")
     implementation("com.lihaoyi:upickle_2.13:3.1.3")
 }
 
@@ -53,6 +53,10 @@ val runAllGraphic by tasks.register<DefaultTask>("runAllGraphic") {
 val runAllBatch by tasks.register<DefaultTask>("runAllBatch") {
     group = alchemistGroup
     description = "Launches all experiments"
+}
+val runAllEval by tasks.register<DefaultTask>("runAllEval") {
+    group = alchemistGroup
+    description = "Launches all experiments (eval)"
 }
 /*
  * Scan the folder with the simulation files, and create a task for each one of them.
@@ -94,6 +98,9 @@ File(rootProject.rootDir.path + "/src/main/yaml").listFiles()
                 "-p", threadCount,
                 "-i", 1
             )
+        }
+        if(capitalizedName.contains("Eval")) {
+            runAllEval.dependsOn(batch)
         }
         runAllBatch.dependsOn(batch)
     }
