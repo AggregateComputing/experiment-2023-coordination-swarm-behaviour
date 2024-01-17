@@ -8,7 +8,7 @@ import java.util
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 class VerticalDeviationExtractor(val centerId: Int) extends Extractor[Double] {
-  override def getColumnNames: util.List[String] = util.List.of("deviation[mean]", "deviation [std]")
+  override def getColumnNames: util.List[String] = util.List.of("deviation[mean]", "deviation[std]")
 
   override def extractData[T](
                                environment: Environment[T, _],

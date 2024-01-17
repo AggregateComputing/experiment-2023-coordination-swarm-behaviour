@@ -5,5 +5,6 @@ import it.unibo.scafi.space.Point3D
 
 class LineFormation extends BaseMovement {
   val id = 24
-  override protected def movementLogic(): Point3D = line(id == mid(), 20, 5, Point3D.Zero)
+  def distance: java.lang.Double = sense("distance")
+  override protected def movementLogic(): Point3D = line(id == mid(), distance, 5, Point3D.Zero)
 }

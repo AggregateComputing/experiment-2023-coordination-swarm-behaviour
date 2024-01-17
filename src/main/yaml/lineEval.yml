@@ -10,6 +10,8 @@ variables:
     formula: 350
   leader: &leader
     formula: 24
+  distance: &distance
+    formula: 20.0
 
 _constants:
   grain: &grain 500.0
@@ -55,6 +57,8 @@ deployments:
     concentration: *grain
   - molecule: leader
     concentration: *leader
+  - molecule: distance
+    concentration: *distance
 
 
 terminate:

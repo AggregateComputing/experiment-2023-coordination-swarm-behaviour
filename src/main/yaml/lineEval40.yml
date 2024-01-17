@@ -1,0 +1,80 @@
+incarnation: scafi
+
+variables:
+  random: &random
+    min: 0
+    max: 16
+    step: 1
+    default: 2
+  range: &range
+    formula: 350
+  leader: &leader
+    formula: 24
+  distance: &distance
+    formula: 40.0
+
+_constants:
+  grain: &grain 500.0
+  retentionTime: &retentionTime 5.0
+
+environment:
+  type: Continuous2DEnvironment
+  parameters: []
+
+seeds:
+  scenario: *random
+  simulation: *random
+
+network-model:
+  type: ConnectWithinDistance
+  parameters: [*range]
+
+_reactions:
+  - program: &program
+    - time-distribution:
+        type: DiracComb
+        parameters: [ 0, 1 ]
+      type: Event
+      actions:
+        - type: RunScafiProgram
+          parameters: [it.unibo.scafi.evaluation.LineFormation, *retentionTime]
+    - program: send
+  - move: &move
+    - time-distribution:
+        type: DiracComb
+        parameters: [ 0, 1 ]
+      type: Event
+      actions: { type: MoveToTarget, parameters: [ destination, 10 ] }
+
+deployments:
+  type: Grid
+  parameters: [0, 0, 1000, 1000, 150, 150, 25, 25]
+  programs:
+  - *program
+  - *move
+  contents:
+  - molecule: grain
+    concentration: *grain
+  - molecule: leader
+    concentration: *leader
+  - molecule: distance
+    concentration: *distance
+
+
+terminate:
+  - type: AfterTime
+    parameters: 2700
+
+export:
+  - type: PositionExporter
+    parameters: [ "data/positions", "lineEval40", 5 ]
+    data: []
+  - type: CSVExporter
+    parameters:
+      exportPath: "data"
+      fileNameRoot: "lineEval40"
+      interval: 1.0
+    data:
+      - time
+      - type: VerticalDeviationExtractor
+        parameters: [ *leader ]

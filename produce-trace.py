@@ -8,6 +8,7 @@ import glob
 import os
 import sys
 
+plt.rcParams.update({'font.size': 35})
 # Get the path from the command line
 path = sys.argv[1]
 
@@ -70,8 +71,7 @@ def plot_experiment(experiment_name, experiment, crop=500):
     ## change the limits of the plot
     plt.ylabel('Y Coordinate')
 
-    plt.grid(True)
-    plt.legend()
+    plt.grid(False)
     ## tigh layout
     plt.tight_layout()
     # Show the plot
