@@ -178,7 +178,7 @@ def beautifyValue(v):
         return v
 
 minTime = 10
-maxTime = 5400
+maxTime = 2700
 means = {}
 stdevs = {}
 if __name__ == '__main__':
@@ -190,7 +190,7 @@ if __name__ == '__main__':
     # How to name the summary of the processed data
     pickleOutput = 'data_summary'
     # Experiment prefixes: one per experiment (root of the file name)
-    experiments = ['rescue']
+    experiments = ['vEval', 'vEval30', 'vEval60']
     floatPrecision = '{: 0.3f}'
     # Number of time samples
     timeSamples = 100
@@ -326,56 +326,7 @@ if __name__ == '__main__':
     import matplotlib.cm as cmx
     #matplotlib.rcParams.update({'axes.titlesize': 12})
     #matplotlib.rcParams.update({'axes.labelsize': 10})
-    def make_line_chart(xdata, ydata, title = None, ylabel = None, xlabel = None, colors = None, linewidth = 1, errlinewidth = 0.5, figure_size = (6, 4)):
-        fig = plt.figure(figsize = figure_size)
-        ax = fig.add_subplot(1, 1, 1)
-        ax.set_title(title)
-        ax.set_xlabel(xlabel)
-        ax.set_ylabel(ylabel)
-        #        ax.set_ylim(0)
-        #        ax.set_xlim(min(xdata), max(xdata))
-        index = 0
-        for (label, (data, error)) in ydata.items():
-            #            print(f'plotting {data}\nagainst {xdata}')
-            lines = ax.plot(xdata, data, label=label, color=colors(index / (len(ydata) - 1)) if colors else None, linewidth=linewidth)
-            index += 1
-            if error is not None:
-                last_color = lines[-1].get_color()
-                ax.plot(xdata, data+error, label=None, color=last_color, linewidth=errlinewidth)
-                ax.plot(xdata, data-error, label=None, color=last_color, linewidth=errlinewidth)
-        return (fig, ax)
-
-    def produce_chart(means, error, label, palette=palette):
-        sns.set_palette(palette)
-        plot_label = unit_for(label)
-        data = pd.DataFrame({'time (minutes)': means['time'] / 60, plot_label: means[label], "y-error": error[label]})
-        lower_bound = data.copy()
-        upper_bound = data.copy()
-        all_data = data.copy()
-        upper_bound[plot_label] = upper_bound[plot_label] - upper_bound['y-error']
-        lower_bound[plot_label] = lower_bound[plot_label] - lower_bound['y-error']
-        reference = all_data.append(upper_bound).append(lower_bound)
-        return sns.lineplot(x='time (minutes)', y=plot_label, data=reference.reset_index())
     
-    def finalise_fig(ax, name):
-        fig = ax.figure
-        fig.tight_layout()
-        fig.savefig(f'{output_directory}/{name}.pdf')
-        plt.close(fig)
     eval_data()
-    sns.set(font_scale=1.22)
-    current_experiment_means = means['rescue'].fillna(0.0)
-    current_experiment_errors = stdevs['rescue'].fillna(0.0)
-    if(not os.path.exists("charts")):
-        os.makedirs("charts")
-    ax = produce_chart(current_experiment_means, current_experiment_errors, "minDistance[min]")
-    finalise_fig(ax, "min_distance")
-    ax = produce_chart(current_experiment_means, current_experiment_errors, "inDanger", palette[1:])
-    finalise_fig(ax, "in_danger")
-    maxTime = 120
-    eval_data()
-    current_experiment_means = means['rescue'].fillna(0.0)
-    current_experiment_errors = stdevs['rescue'].fillna(0.0)
-    ax = produce_chart(current_experiment_means, current_experiment_errors, "avgDistanceTeam[mean]", palette[2:])
-    finalise_fig(ax, "average_intra_team_distance")
+
 # Custom charting
