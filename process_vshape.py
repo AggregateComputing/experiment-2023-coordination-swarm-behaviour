@@ -19,9 +19,9 @@ if __name__ == '__main__':
         1200
     )
     convert_name = {
-        'vEval': 'v shape[45°]',
-        'vEval30': 'v shape[30°]',
-        'vEval60': 'v shape[60°]',
+        'vEval': 'v shape=45°',
+        'vEval30': 'v shape=30°',
+        'vEval60': 'v shape=60°',
     }
     for label in means:
         ds = means[label]
@@ -35,9 +35,9 @@ if __name__ == '__main__':
         plt.plot(ds['time'], ds['angle[mean]'], label=convert_name[label])
 
     plt.xlabel('Time')
-    plt.ylabel('Average Angle')
-    plt.title('Angle w.r.t. leader')
-    plt.legend(fontsize=16, title_fontsize=20)
+    plt.ylabel('Average angle')
+    plt.title('V-shape')
+    plt.legend(fontsize=17, title_fontsize=20)
     plt.grid(True)
     plt.tight_layout()
     plt.savefig('charts/vSpaceEval.pdf')

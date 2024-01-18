@@ -35,7 +35,7 @@ if __name__ == '__main__':
     plt.xlabel('Time')
     plt.ylabel('# unique choices')
     plt.title('Choices over time')
-    plt.legend(fontsize=16, title_fontsize=20)
+    plt.legend(fontsize=17, title_fontsize=20)
     plt.grid(True)
     plt.tight_layout()
     plt.savefig('charts/consensus.pdf')

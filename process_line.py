@@ -19,9 +19,9 @@ if __name__ == '__main__':
         1200
     )
     convert_name = {
-        'lineEval': 'line 20m',
-        'lineEval10': 'line 10m',
-        'lineEval40': 'line 40m',
+        'lineEval': 'line=20m',
+        'lineEval10': 'line=10m',
+        'lineEval40': 'line=40m',
     }
     for label in means:
         ds = means[label]
@@ -35,9 +35,9 @@ if __name__ == '__main__':
         plt.plot(ds['time'], ds['deviation[mean]'], label=convert_name[label])
     
     plt.xlabel('Time')
-    plt.ylabel('Average Deviation')
-    plt.title('Deviation w.r.t. leader')
-    plt.legend(fontsize=16, title_fontsize=20)
+    plt.ylabel('Average vertical deviation')
+    plt.title('Line')
+    plt.legend(fontsize=17, title_fontsize=20)
     plt.grid(True)
     plt.tight_layout()
     plt.savefig('charts/lineChart.pdf')

@@ -18,9 +18,9 @@ if __name__ == '__main__':
         1200
     )
     convert_name = {
-        'separationEval': 'separation [60m]',
-        'separationEval30': 'separation [30m]',
-        'separationEval120': 'separation [120m]',
+        'separationEval': 'separation=60m',
+        'separationEval30': 'separation=30m',
+        'separationEval120': 'separation=120m',
     }
     for label in means:
         ds = means[label]
@@ -34,9 +34,9 @@ if __name__ == '__main__':
         plt.plot(ds['time'], ds['distance[mean]'], label=convert_name[label])
     
     plt.xlabel('Time')
-    plt.ylabel('Average Distance')
-    plt.title('Distance w.r.t. the neighbors')
-    plt.legend(fontsize=16, title_fontsize=20)
+    plt.ylabel('Average distance')
+    plt.title('Separation')
+    plt.legend(fontsize=17, title_fontsize=20)
     plt.grid(True)
     plt.tight_layout()
     plt.savefig('charts/separationEvalChart.pdf')

@@ -8,7 +8,7 @@ import glob
 import os
 import sys
 
-plt.rcParams.update({'font.size': 40})
+plt.rcParams.update({'font.size': 35})
 # Get the path from the command line
 path = sys.argv[1]
 
@@ -20,18 +20,18 @@ charts_folder = os.path.basename("charts")
 files_map = {}
 name_map = {
     'consensusEval': 'consensus',
-    'circleEvalSmall': 'circle (distance = 80m)',
-    'circleEvalLarge': 'circle (distance = 160m)',
-    'circleEval': 'circle (distance = 80m)',
-    'separationEval120': 'separation (distance = 120m)',
-    'separationEval': 'separation (distance = 60m)',
-    'separationEval30': 'separation (distance = 30m)',
-    'lineEval': 'line (distance = 20m)',
-    'lineEval10': 'line (distance = 10m)',
-    'lineEval40': 'line (distance = 40m)',
-    'vEval': 'v shape (radius = 45°)',
-    'vEval30': 'v shape (radius = 30°)',
-    'vEval60': 'v shape (radius = 60°)',
+    'circleEvalSmall': 'circle (distance=80m)',
+    'circleEvalLarge': 'circle (distance=160m)',
+    'circleEval': 'circle (distance=80m)',
+    'separationEval120': 'separation (distance=120m)',
+    'separationEval': 'separation (distance=60m)',
+    'separationEval30': 'separation (distance=30m)',
+    'lineEval': 'line (distance=20m)',
+    'lineEval10': 'line (distance=10m)',
+    'lineEval40': 'line (distance=40m)',
+    'vEval': 'v shape (radius=45°)',
+    'vEval30': 'v shape (radius=30°)',
+    'vEval60': 'v shape (radius=60°)',
 }
 for file in files:
     # Get the file name
@@ -85,7 +85,6 @@ def plot_experiment(experiment_name, experiment, crop=500):
     plt.xlabel('X Coordinate')
     ## change the limits of the plot
     plt.ylabel('Y Coordinate')
-
     plt.grid(False)
     ## tigh layout
     plt.tight_layout()
