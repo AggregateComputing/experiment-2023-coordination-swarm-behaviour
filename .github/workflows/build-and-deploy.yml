@@ -45,7 +45,7 @@ jobs:
       - name: Prepare charts folder
         run: mkdir -p charts
       - name: Generate charts
-        run: python process.py
+        run: python process_rescue.py
       - name: Generate archive
         run: tar --use-compress-program zstd -cf charts.tar.zst charts/
       - name: Upload charts
