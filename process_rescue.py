@@ -354,7 +354,7 @@ if __name__ == '__main__':
         all_data = data.copy()
         upper_bound[plot_label] = upper_bound[plot_label] - upper_bound['y-error']
         lower_bound[plot_label] = lower_bound[plot_label] - lower_bound['y-error']
-        reference = all_data._append(upper_bound)._append(lower_bound)
+        reference = all_data.append(upper_bound).append(lower_bound)
         return sns.lineplot(x='time (minutes)', y=plot_label, data=reference.reset_index())
 
     def finalise_fig(ax, name):
