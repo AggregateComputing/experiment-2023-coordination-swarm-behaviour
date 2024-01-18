@@ -40,6 +40,5 @@ if __name__ == '__main__':
     plt.legend(fontsize=16, title_fontsize=20)
     plt.grid(True)
     plt.tight_layout()
-    plt.show()
     plt.savefig('charts/vSpaceEval.pdf')
         

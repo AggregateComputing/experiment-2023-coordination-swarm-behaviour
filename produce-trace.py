@@ -8,7 +8,7 @@ import glob
 import os
 import sys
 
-plt.rcParams.update({'font.size': 35})
+plt.rcParams.update({'font.size': 40})
 # Get the path from the command line
 path = sys.argv[1]
 
@@ -18,6 +18,21 @@ files = glob.glob(os.path.join(path, "*.json"))
 charts_folder = os.path.basename("charts")
 # Create a map that contains the experiment name and a list of the file. Given a file <experiment>-data-1.json, the key will be "experiment" and the value will be a list with the file experiment-data-1.json
 files_map = {}
+name_map = {
+    'consensusEval': 'consensus',
+    'circleEvalSmall': 'circle (distance = 80m)',
+    'circleEvalLarge': 'circle (distance = 160m)',
+    'circleEval': 'circle (distance = 80m)',
+    'separationEval120': 'separation (distance = 120m)',
+    'separationEval': 'separation (distance = 60m)',
+    'separationEval30': 'separation (distance = 30m)',
+    'lineEval': 'line (distance = 20m)',
+    'lineEval10': 'line (distance = 10m)',
+    'lineEval40': 'line (distance = 40m)',
+    'vEval': 'v shape (radius = 45°)',
+    'vEval30': 'v shape (radius = 30°)',
+    'vEval60': 'v shape (radius = 60°)',
+}
 for file in files:
     # Get the file name
     file_name = os.path.basename(file)
@@ -66,7 +81,7 @@ def plot_experiment(experiment_name, experiment, crop=500):
                 plt.plot(x_values[i:i+2], y_values[i:i+2], color=color, linewidth=linewidth)
 
     # Adding title and labels
-    plt.title('Drone Trajectories')
+    plt.title(name_map[experiment_name])
     plt.xlabel('X Coordinate')
     ## change the limits of the plot
     plt.ylabel('Y Coordinate')

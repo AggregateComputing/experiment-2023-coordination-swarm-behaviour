@@ -37,8 +37,9 @@ if __name__ == '__main__':
     plt.xlabel('Time')
     plt.ylabel('Average Deviation')
     plt.title('Deviation w.r.t. leader')
-    plt.legend()
+    plt.legend(fontsize=16, title_fontsize=20)
     plt.grid(True)
+    plt.tight_layout()
     plt.savefig('charts/lineChart.pdf')
 
         
