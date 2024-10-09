@@ -4,7 +4,7 @@ import it.unibo.alchemist.boundary.swingui.effect.api.Effect
 import it.unibo.alchemist.boundary.ui.api.Wormhole2D
 import it.unibo.alchemist.model.implementations.effects.MacroSwarmEffect._
 import it.unibo.alchemist.model.implementations.nodes._
-import it.unibo.alchemist.model.interfaces.{Environment, Node, Position, Position2D}
+import it.unibo.alchemist.model.{Environment, Node, Position, Position2D}
 import it.unibo.scafi.space.Point3D
 import it.unibo.scafi.space.pimp.PimpPoint3D
 import org.danilopianini.lang.RangedInteger

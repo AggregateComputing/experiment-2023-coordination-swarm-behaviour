@@ -1,7 +1,7 @@
 package it.unibo.scafi.evaluation
 
-import it.unibo.alchemist.model.implementations.molecules
-import it.unibo.alchemist.model.implementations.molecules.SimpleMolecule
+import it.unibo.alchemist.model.molecules
+import it.unibo.alchemist.model.molecules.SimpleMolecule
 import it.unibo.alchemist.model.implementations.nodes.SimpleNodeManager
 import it.unibo.alchemist.model.scafi.ScafiIncarnationForAlchemist.ID
 import it.unibo.scafi.examples.BaseMovement

@@ -1,8 +1,8 @@
 package it.unibo.alchemist.model.implementations.reactions
 
-import it.unibo.alchemist.model.implementations.molecules.SimpleMolecule
-import it.unibo.alchemist.model.implementations.nodes.GenericNode
-import it.unibo.alchemist.model.interfaces.{Environment, Position, TimeDistribution}
+import it.unibo.alchemist.model.molecules.SimpleMolecule
+import it.unibo.alchemist.model.nodes.GenericNode
+import it.unibo.alchemist.model.{Environment, Position, TimeDistribution}
 import org.apache.commons.math3.random.RandomGenerator
 
 class DangerSpawn[T, P <: Position[P]](

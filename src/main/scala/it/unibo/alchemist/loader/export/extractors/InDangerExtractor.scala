@@ -1,9 +1,9 @@
 package it.unibo.alchemist.loader.`export`.extractors
 
-import it.unibo.alchemist.loader.`export`.Extractor
-import it.unibo.alchemist.model.implementations.molecules.SimpleMolecule
-import it.unibo.alchemist.model.interfaces
-import it.unibo.alchemist.model.interfaces.{Actionable, Environment}
+import it.unibo.alchemist.boundary.Extractor
+import it.unibo.alchemist.model
+import it.unibo.alchemist.model.molecules.SimpleMolecule
+import it.unibo.alchemist.model.{Actionable, Environment, Time}
 
 import java.util
 import scala.jdk.CollectionConverters.ListHasAsScala
@@ -14,7 +14,7 @@ class InDangerExtractor extends Extractor[Double] {
   override def extractData[T](
       environment: Environment[T, _],
       actionable: Actionable[T],
-      time: interfaces.Time,
+      time: Time,
       l: Long
   ): util.Map[String, Double] = {
     val dangerTriggered = environment.getNodes.asScala

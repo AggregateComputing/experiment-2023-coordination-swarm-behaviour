@@ -33,9 +33,7 @@ network-model:
 
 _reactions:
   - program: &program
-    - time-distribution:
-        type: DiracComb
-        parameters: [ 0, 1 ]
+    - time-distribution: 1
       type: Event
       actions:
         - type: RunScafiProgram

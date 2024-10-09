@@ -1,7 +1,7 @@
 package it.unibo.alchemist.model.implementations.reactions
 
 import it.unibo.alchemist.model.implementations.nodes.SimpleNodeManager
-import it.unibo.alchemist.model.interfaces._
+import it.unibo.alchemist.model._
 import org.danilopianini.util.{ListSet, ListSets}
 
 import java.util

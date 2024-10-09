@@ -1,5 +1,5 @@
 [versions]
-alchemist = "25.11.0"
+alchemist = "34.1.4"
 ui = "5.0.0"
 
 [libraries]

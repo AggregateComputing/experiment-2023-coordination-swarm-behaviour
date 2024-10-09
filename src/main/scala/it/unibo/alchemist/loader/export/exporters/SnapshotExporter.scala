@@ -1,6 +1,7 @@
 package it.unibo.alchemist.loader.`export`.exporters
 
-import it.unibo.alchemist.model.interfaces.{Actionable, Environment, Position, Time}
+import it.unibo.alchemist.boundary.exporters.AbstractExporter
+import it.unibo.alchemist.model.{Actionable, Environment, Position, Time}
 
 import java.awt.image.BufferedImage
 

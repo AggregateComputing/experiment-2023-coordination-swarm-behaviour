@@ -1,6 +1,6 @@
 package it.unibo.scafi.examples
 
-import it.unibo.alchemist.model.interfaces.Position
+import it.unibo.alchemist.model.Position
 import it.unibo.alchemist.model.scafi.ScafiIncarnationForAlchemist.ScafiAlchemistSupport
 import it.unibo.scafi.macroswarm.MacroSwarmAlchemistSupport._
 import it.unibo.scafi.macroswarm.MacroSwarmAlchemistSupport.incarnation._

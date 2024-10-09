@@ -19,8 +19,9 @@ dependencies {
     implementation("com.lihaoyi:upickle_2.13:3.1.3")
 }
 
+val projectJavaVersion: Int = 17
 multiJvm {
-    jvmVersionForCompilation.set(11)
+    jvmVersionForCompilation.set(projectJavaVersion)
 }
 
 // Heap size estimation for batches
@@ -70,33 +71,45 @@ File(rootProject.rootDir.path + "/src/main/yaml").listFiles()
             description = "Launches graphic simulation ${it.nameWithoutExtension}"
             mainClass.set("it.unibo.alchemist.Alchemist")
             classpath = sourceSets["main"].runtimeClasspath
-            jvmArgs("-Dsun.java2d.opengl=false")
-            args("-y", it.absolutePath)
-            if (System.getenv("CI") == "true") {
-                args("-hl", "-t", "2")
-            } else {
-                args("-g", "effects/effect-simulation.json")
-            }
+            args("run", it.absolutePath)
             javaLauncher.set(
                 javaToolchains.launcherFor {
-                    languageVersion.set(JavaLanguageVersion.of(11))
-                }
+                    languageVersion.set(JavaLanguageVersion.of(projectJavaVersion))
+                },
             )
+            if (System.getenv("CI") == "true") {
+                args("--override", "terminate: { type: AfterTime, parameters: [2] } ")
+                args("--override", "export: { type: CSVExporter, parameters: { fileNameRoot: noname, interval: 1.0, exportPath: nopath }, data: [time] }")
+            } else {
+                this.additionalConfiguration()
+            }
             this.additionalConfiguration()
         }
         val capitalizedName = it.nameWithoutExtension.capitalize()
-        val graphic by basetask("run${capitalizedName}Graphic")
+        val graphic by basetask("run${capitalizedName}Graphic") {
+            args(
+                "--override",
+                "monitors: { type: SwingGUI, parameters: { graphics: effects/effect-simulation.json } }",
+                "--override",
+                "launcher: { parameters: { batch: [], autoStart: false } }",
+            )
+        }
         runAllGraphic.dependsOn(graphic)
         val batch by basetask("run${capitalizedName}Batch") {
             description = "Launches batch experiments for $capitalizedName"
             maxHeapSize = "${minOf(heap.toInt(), Runtime.getRuntime().availableProcessors() * taskSize)}m"
             File("data").mkdirs()
-            args(
-                "-e", "data/${it.nameWithoutExtension}",
-                "-b",
-                "-var", "random",
-                "-p", threadCount,
-                "-i", 1
+            args("--override",
+                """
+                    launcher: {
+                        parameters: {
+                            batch: [ random ],
+                            showProgress: true,
+                            autoStart: true,
+                            parallelism: $threadCount,
+                        }
+                    }
+                """.trimIndent()
             )
         }
         if(capitalizedName.contains("Eval")) {
