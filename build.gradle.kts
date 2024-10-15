@@ -15,6 +15,8 @@ repositories {
 dependencies {
     // Check the catalog at gradle/libs.versions.gradle
     implementation(libs.bundles.alchemist)
+    implementation(libs.bundles.scalacache)
+
     implementation("it.unibo.scafi:macro-swarm-core_2.13:1.5.0")
     implementation("com.lihaoyi:upickle_2.13:3.1.3")
 }

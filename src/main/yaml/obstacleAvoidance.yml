@@ -38,7 +38,7 @@ _reactions:
         type: DiracComb
         parameters: [ 0, 1 ]
       type: Event
-      actions: { type: MoveToTarget, parameters: [ destination, 10 ] }
+      actions: { type: MoveToTargetWithSpeed, parameters: [ destination, speed ] }
 layers:
   - type: BidimensionalGaussianLayer
     molecule: obstacle
@@ -55,6 +55,8 @@ deployments:
       concentration: *grain
     - molecule: obstacle
       concentration: false
+    - molecule: speed
+      concentration: 1.0
 
   - type: Point
     parameters: [ 500, 500 ]
@@ -63,6 +65,8 @@ deployments:
     contents:
       - molecule: obstacle
         concentration: true
+      - molecule: speed
+        concentration: 1.0
 
 export:
   - type: SnapshotExporter

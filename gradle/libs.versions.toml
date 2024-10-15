@@ -1,6 +1,7 @@
 [versions]
 alchemist = "34.1.4"
 ui = "5.0.0"
+scalacache = "0.28.0"
 
 [libraries]
 alchemist = { module = "it.unibo.alchemist:alchemist", version.ref = "alchemist" }
@@ -11,8 +12,11 @@ alchemist-incarnation-api = { module = "it.unibo.alchemist:alchemist-incarnation
 alchemist-ui = { module = "it.unibo.alchemist:alchemist-ui-tooling", version.ref = "alchemist" }
 alchemist-geometry = { module = "it.unibo.alchemist:alchemist-maps", version.ref = "alchemist" }
 tooling-gui = { module = "org.danilopianini:javalib", version.ref = "ui" }
+scalacache-core = { module = "com.github.cb372:scalacache-core_2.13", version.ref = "scalacache" }
+scalacache-guava = { module = "com.github.cb372:scalacache-guava_2.13", version.ref = "scalacache" }
 [bundles]
 alchemist = ["alchemist", "alchemist-incarnation-scafi", "alchemist-swingui", "alchemist-ui", "alchemist-geometry", "tooling-gui"]
+scalacache = [ "scalacache-core", "scalacache-guava" ]
 
 [plugins]
 multiJvmTesting = "org.danilopianini.multi-jvm-test-plugin:0.4.15"

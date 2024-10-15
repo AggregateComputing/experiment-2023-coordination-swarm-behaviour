@@ -40,7 +40,7 @@ _reactions:
         type: DiracComb
         parameters: [ 0, 1 ]
       type: Event
-      actions: { type: MoveToTarget, parameters: [ destination, 10 ] }
+      actions: { type: MoveToTargetWithSpeed, parameters: [ destination, speed ] }
 
 deployments:
   type: Grid
@@ -55,6 +55,8 @@ deployments:
     concentration: 2.0
   - molecule: leader
     concentration: *leader
+  - molecule: speed
+    concentration: 1.0
 
 export:
   - type: PositionExporter

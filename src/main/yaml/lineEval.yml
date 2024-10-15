@@ -10,6 +10,8 @@ variables:
     formula: 350
   leader: &leader
     formula: 24
+  breaking: &breaking
+    formula: 1000
   distance: &distance
     formula: 20.0
 
@@ -42,7 +44,7 @@ _reactions:
         type: DiracComb
         parameters: [ 0, 1 ]
       type: Event
-      actions: { type: MoveToTarget, parameters: [ destination, 10 ] }
+      actions: { type: MoveToTargetWithSpeed, parameters: [ destination, speed ] }
 
 deployments:
   type: Grid
@@ -57,6 +59,8 @@ deployments:
     concentration: *leader
   - molecule: distance
     concentration: *distance
+  - molecule: speed
+    concentration: 1.0
 
 
 terminate:

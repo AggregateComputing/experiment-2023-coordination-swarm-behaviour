@@ -233,6 +233,7 @@ trait LeaderBasedMovement[E <: MacroSwarmSupport.Dependency] {
       with CustomSpawn
       with BlocksWithGC
       with BlocksWithShare =>
+    type AllocationStrategy = (List[(ID, Point3D)], List[Point3D]) => Map[ID, Point3D]
 
     /** Creates a line shape. The leader is responsible for the shape. The nodes are placed in a line with a distance
       * Example: o -- o -- x -- o -- o
@@ -253,22 +254,22 @@ trait LeaderBasedMovement[E <: MacroSwarmSupport.Dependency] {
         distance: Double,
         confidence: Double,
         leaderVelocity: => Point3D = Point3D.Zero
-    ): Point3D = {
-      val potential = fastGradient(leader)
-      val nodes = getNodeInfo(potential)
-      val (left, right) = orderedNodes(nodes).splitAt(nodes.size / 2)
-      val leftSuggestion = left.zipWithIndex.map { case ((id, velocity), i) =>
-        id -> (Point3D(-(i + 1) * distance, 0, 0) + velocity)
-      }.toMap
-      val rightSuggestions = right.zipWithIndex.map { case ((id, velocity), i) =>
-        id -> (Point3D((i + 1) * distance, 0, 0) + velocity)
-      }.toMap
-      mux(leader)(leaderVelocity) {
-        val direction =
-          broadcastAlongWithShare(potential, leftSuggestion ++ rightSuggestions, nbrRange)
-            .getOrElse(mid().asInstanceOf[ID], Point3D.Zero)
-        mux(direction.module < confidence)(Point3D.Zero)(direction.normalize)
+    ): Point3D = formShape(leader, leaderVelocity, lineSuggestion(_, distance), confidence)
+
+    private def lineSuggestion(
+        nodes: List[(ID, Point3D)],
+        distance: Double,
+        allocationStrategy: AllocationStrategy = idBasedAllocation
+    ): Map[ID, Point3D] = {
+      val (left, right) = nodes.splitAt(nodes.size / 2)
+      val leftSuggestion = left.zipWithIndex.map { case ((id, _), i) =>
+        Point3D(-(i + 1) * distance, 0, 0)
       }
+      val rightSuggestions = right.zipWithIndex.map { case ((id, _), i) =>
+        Point3D((i + 1) * distance, 0, 0)
+      }
+
+      allocationStrategy(nodes, leftSuggestion ++ rightSuggestions)
     }
 
     /** Creates a circle shape. The leader is responsible for the shape. The nodes are placed in a circle with a
@@ -302,19 +303,20 @@ trait LeaderBasedMovement[E <: MacroSwarmSupport.Dependency] {
         radius: Double,
         confidence: Double,
         leaderVelocity: => Point3D = Point3D.Zero
-    ): Point3D = {
-      val potential = fastGradient(leader)
-      val nodes = getNodeInfo(potential)
+    ): Point3D =
+      formShape(leader, leaderVelocity, circleShapePolicy(_, radius), confidence)
+
+    private def circleShapePolicy(
+        nodes: List[(ID, Point3D)],
+        radius: Double,
+        allocationStrategy: AllocationStrategy = idBasedAllocation
+    ): Map[ID, Point3D] = {
       val division = (math.Pi * 2) / nodes.size
-      val suggestion = orderedNodes(nodes).zipWithIndex.map { case ((id, v), i) =>
-        val angle = division * (i + 1)
-        id -> (Point3D(math.sin(angle) * radius, math.cos(angle) * radius, 0) + v)
-      }.toMap
-      mux(leader)(leaderVelocity) {
-        val direction =
-          broadcastAlongWithShare(potential, suggestion, nbrRange).getOrElse(mid().asInstanceOf[ID], Point3D.Zero)
-        mux(direction.module < confidence)(Point3D.Zero)(direction.normalize)
+      val desiredPositions = nodes.zipWithIndex.map { case ((_, _), i) =>
+        val angle = division * i
+        Point3D(math.sin(angle) * radius, math.cos(angle) * radius, 0)
       }
+      allocationStrategy(nodes, desiredPositions)
     }
 
     /** Creates a v-shape. The leader is responsible for the shape. The nodes are placed in a v-shape with a distance
@@ -352,27 +354,27 @@ trait LeaderBasedMovement[E <: MacroSwarmSupport.Dependency] {
         radius: Double,
         confidence: Double,
         leaderVelocity: Point3D = Point3D.Zero
-    ): Point3D = {
-      val potential = fastGradient(leader)
-      val nodes = getNodeInfo(potential)
+    ): Point3D = formShape(leader, leaderVelocity, vShapeSuggestions(_, distance, radius, oldVelocity), confidence)
+
+    def vShapeSuggestions(
+        nodes: List[(ID, Point3D)],
+        distance: Double,
+        radius: Double,
+        oldVelocity: Point3D,
+        allocationStrategy: AllocationStrategy = idBasedAllocation
+    ): Map[ID, Point3D] = {
       val amount = ((Math.PI * 2) - radius) / 2 // - (Math.PI / 2)
-      def oldVelocityOrUnitary = if(oldVelocity.module == 0) Point3D(0, 1, 0) else oldVelocity.normalize
+      def oldVelocityOrUnitary = if (oldVelocity.module == 0) Point3D(0, 1, 0) else oldVelocity.normalize
       val leftVersor = oldVelocityOrUnitary.rotate(amount).rotate(-Math.PI / 2)
       val rightVersor = oldVelocityOrUnitary.rotate(-amount).rotate(-Math.PI / 2)
-      val (left, right) = orderedNodes(nodes).splitAt(nodes.size / 2)
-      val leftSuggestion = left.zipWithIndex.map { case ((id, velocity), i) =>
-        id -> (leftVersor * distance * -(i + 1) + velocity)
-      }.toMap
-      val rightSuggestions = right.zipWithIndex.map { case ((id, velocity), i) =>
-        id -> (rightVersor * distance * (i + 1) + velocity)
-      }.toMap
-      mux(leader)(leaderVelocity) {
-        val direction =
-          broadcastAlongWithShare(potential, leftSuggestion ++ rightSuggestions, nbrRange)
-            .getOrElse(mid().asInstanceOf[ID], Point3D.Zero)
-        mux(direction.module < confidence)(Point3D.Zero)(direction.normalize)
+      val (left, right) = nodes.splitAt(nodes.size / 2)
+      val leftSuggestion = left.zipWithIndex.map { case ((_, _), i) =>
+        leftVersor * distance * -(i + 1)
       }
-
+      val rightSuggestions = right.zipWithIndex.map { case ((_, _), i) =>
+        rightVersor * distance * (i + 1)
+      }
+      allocationStrategy(nodes, leftSuggestion ++ rightSuggestions)
     }
 
     /** A utility function for verifying whether a circle is formed or not.
@@ -393,20 +395,57 @@ trait LeaderBasedMovement[E <: MacroSwarmSupport.Dependency] {
       broadcastAlongWithShare(potential, isFormed & distances.nonEmpty, nbrRange)
     }
 
-    private def getNodeInfo(potential: Double): Set[(ID, Point3D)] = {
+    private def formShape(
+        leader: Boolean,
+        leaderVelocity: => Point3D,
+        suggestionFunction: (List[(ID, Point3D)]) => Map[ID, Point3D],
+        confidence: Double
+    ): Point3D = {
+      val potential = fastGradient(leader)
+      val nodes = getNodeInfo(potential)
+      val orderedNodesList = orderedNodes(nodes)
+
+      val suggestions =
+        branch(leader)(suggestionFunction(orderedNodesList))(Map.empty[ID, Point3D])
+
+      mux(leader)(leaderVelocity) {
+        val direction =
+          broadcastAlongWithShare(potential, suggestions, nbrRange).getOrElse(mid().asInstanceOf[ID], Point3D.Zero)
+        mux(direction.module < confidence)(Point3D.Zero)(direction.normalize)
+      }
+    }
+
+    private def getNodeInfo(potential: Double): Map[ID, Point3D] = {
       val distanceFromLeader = GAlongWithShare[Point3D](potential, Point3D.Zero, v => v + nbrVector(), nbrRange)
-      C[Double, Set[(ID, Point3D)]](
+      C[Double, Map[ID, Point3D]](
         potential,
         (a, b) => a ++ b,
-        Set((mid(), distanceFromLeader)),
-        Set.empty[(ID, Point3D)]
+        Map(mid() -> distanceFromLeader),
+        Map.empty[ID, Point3D]
       ).filter(_._1 != mid())
     }
 
-    private def orderedNodes(nodes: Set[(ID, Point3D)]): List[(ID, Point3D)] = nodes
+    private def orderedNodes(nodes: Map[ID, Point3D]): List[(ID, Point3D)] = nodes
       .filter(_._1 != mid())
       .toList
       .sortBy(_._1)(ordering)
+
+    private def distanceBasedAllocation(nodes: List[(ID, Point3D)], positions: List[Point3D]): Map[ID, Point3D] = {
+      var toBeAllocated = nodes.toMap
+      var allocations = Map.empty[ID, Point3D]
+      positions.zipWithIndex.foreach { case (desired, i) =>
+        val (id, _) = toBeAllocated.minBy { case (_, v) => (v + desired).module }
+        allocations += id -> (desired + toBeAllocated(id))
+        toBeAllocated -= id
+      }
+      allocations
+    }
+
+    private def idBasedAllocation(nodes: List[(ID, Point3D)], positions: List[Point3D]): Map[ID, Point3D] = {
+      nodes.zipWithIndex.map { case ((id, v), i) =>
+        id -> (positions(i) + v)
+      }.toMap
+    }
 
   }
 

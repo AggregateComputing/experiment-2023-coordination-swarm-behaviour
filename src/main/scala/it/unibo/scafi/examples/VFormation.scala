@@ -11,7 +11,7 @@ class VFormation extends BaseMovement {
     rep(Point3D(0, 0.1, 0))(v =>
       {
         vShape(mid() == 1, v, 60, Math.PI / 2, 5, v.rotate(0.0001).normalize / 10.0)
-      } + separation(v, OneHopNeighbourhoodWithinRange(40))
+      } + separation(v, OneHopNeighbourhoodWithinRange(5))
     )
   }
 }

@@ -38,8 +38,7 @@ _reactions:
         type: DiracComb
         parameters: [ 0, 1 ]
       type: Event
-      actions: { type: MoveToTarget, parameters: [ destination, 10 ] }
-
+      actions: { type: MoveToTargetWithSpeed, parameters: [ destination, speed ] }
 deployments:
   type: Grid
   parameters: [0, 0, 1000, 1000, 150, 150, 25, 25]
@@ -49,3 +48,5 @@ deployments:
   contents:
   - molecule: grain
     concentration: *grain
+  - molecule: speed
+    concentration: 1.0
