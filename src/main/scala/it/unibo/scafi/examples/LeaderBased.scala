@@ -5,6 +5,6 @@ import it.unibo.scafi.space.Point3D
 import scala.language.postfixOps
 
 class LeaderBased extends BaseMovement {
-  override protected def movementLogic(): Point3D =
+  override protected def movementLogic() =
     alignWithLeader(mid() == 1, remember(brownian(2)))
 }

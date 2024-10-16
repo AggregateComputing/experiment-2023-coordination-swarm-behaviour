@@ -6,7 +6,7 @@ import scala.language.postfixOps
 
 class BranchingExample extends BaseMovement {
   lazy val size = alchemistEnvironment.getNodeCount / 2.0
-  override protected def movementLogic(): Point3D = {
+  override protected def movementLogic() = {
     def logic = alignWithLeader(mid() == 1 || mid() == size + 1, remember(brownian(2)))
     branch(mid() < size)(logic)(logic)
   }

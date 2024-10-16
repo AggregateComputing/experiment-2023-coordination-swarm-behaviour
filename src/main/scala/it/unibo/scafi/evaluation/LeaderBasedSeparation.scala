@@ -7,7 +7,7 @@ import it.unibo.scafi.space.pimp._
 class LeaderBasedSeparation extends BaseMovement {
   val id = 24
   def range: java.lang.Double = sense("separation")
-  override protected def movementLogic(): Point3D = {
+  override protected def movementLogic() = {
     val distances = OneHopNeighbourhoodNearestN(4).queryNeighborhood[Double](0.0, _ + nbrRange())
     val others = distances.filter(_._1 != mid)
     val averageDistance = others.values.sum / others.size

@@ -10,14 +10,14 @@ import java.util.stream.Collectors
 import scala.jdk.CollectionConverters._
 
 class SendScafiMessage[T, P <: Position[P]](
-                                             environment: Environment[T, P],
-                                             device: ScafiDevice[T],
-                                             reaction: Reaction[T],
-                                             randomGenerator: RandomGenerator,
-                                             val program: RunScafiProgram[T, P],
-                                             val droppingProbability: Double = 0.7
+    environment: Environment[T, P],
+    device: ScafiDevice[T],
+    reaction: Reaction[T],
+    randomGenerator: RandomGenerator,
+    val program: RunScafiProgram[T, P],
+    val droppingProbability: Double = 0.0
 ) extends AbstractAction[T](device.getNode) {
-  val lossModel = BernoulliLoss(randomGenerator, 0.05)
+  val lossModel = BernoulliLoss(randomGenerator, droppingProbability)
   assert(reaction != null, "Reaction cannot be null")
   assert(program != null, "Program cannot be null")
 

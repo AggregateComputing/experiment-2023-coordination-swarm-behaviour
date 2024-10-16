@@ -10,7 +10,7 @@ class VFormationAndObstacle extends BaseMovement {
     val deltaVector = Point3D(-200, 200, 0) - currentPosition()
     Seq(deltaVector)
   }
-  override protected def movementLogic(): Point3D = {
+  override protected def movementLogic() = {
     val leader = mid() == 1
     val avoidObstacles = obstacleAvoidance(obstacle, 200, 50)
     val followerVelocity = rep(Point3D(-0.1, 0, 0)) { v =>

@@ -4,7 +4,7 @@ import it.unibo.scafi.space.Point3D
 import it.unibo.scafi.space.pimp.PimpPoint3D
 
 class PlanExample extends BaseMovement {
-  override protected def movementLogic(): Point3D = {
+  override protected def movementLogic() = {
     val leader = mid() == 1
     val goToTop = alignWithLeader(leader, goto(Point3D(200, 200, 0)))
     val goToBottom = alignWithLeader(leader, goto(Point3D(0, 0, 0)))

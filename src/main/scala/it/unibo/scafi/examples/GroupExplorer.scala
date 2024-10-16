@@ -6,7 +6,7 @@ import it.unibo.scafi.space.pimp.PimpPoint3D
 import scala.language.postfixOps
 
 class GroupExplorer extends BaseMovement {
-  override protected def movementLogic(): Point3D = {
+  override protected def movementLogic() = {
     val collisionStrength = 10
     val towardsLeaderStrength = 3
     val followLeaderVelocityStrength = 2

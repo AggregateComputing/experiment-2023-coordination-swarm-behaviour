@@ -6,7 +6,7 @@ import it.unibo.scafi.space.pimp.PimpPoint3D
 import scala.language.postfixOps
 
 class TeamFormation extends BaseMovement {
-  override protected def movementLogic(): Point3D = {
+  override protected def movementLogic() = {
     // a team is formed when the minimum distance between nodes is around 40 meters and the group has at least 3 nodes
     val team = teamFormation( // internally it uses S
       targetIntraDistance = 30,

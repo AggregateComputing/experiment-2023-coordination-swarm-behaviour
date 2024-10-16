@@ -6,5 +6,5 @@ import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
 class RandomMovement extends BaseMovement {
-  override protected def movementLogic(): Point3D = maintainTrajectory(brownian().normalize)(100 seconds)
+  override protected def movementLogic() = maintainTrajectory(brownian().normalize)(100 seconds)
 }

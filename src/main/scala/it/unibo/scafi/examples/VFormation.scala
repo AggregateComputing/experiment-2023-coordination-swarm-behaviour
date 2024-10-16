@@ -7,7 +7,7 @@ import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 
 class VFormation extends BaseMovement {
-  override protected def movementLogic(): Point3D = {
+  override protected def movementLogic() = {
     rep(Point3D(0, 0.1, 0))(v =>
       {
         vShape(mid() == 1, v, 60, Math.PI / 2, 5, v.rotate(0.0001).normalize / 10.0)

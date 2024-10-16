@@ -7,5 +7,5 @@ class CircleFormation extends BaseMovement {
 
   val confidence = 5
   val id = 24
-  override protected def movementLogic(): Point3D = centeredCircle(id == mid(), sense[java.lang.Double]("circle").doubleValue(), confidence, Point3D.Zero)
+  override protected def movementLogic() = centeredCircle(id == mid(), sense[java.lang.Double]("circle").doubleValue(), confidence, Point3D.Zero)
 }

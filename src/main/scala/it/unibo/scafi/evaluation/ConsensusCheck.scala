@@ -29,7 +29,7 @@ class ConsensusCheck extends BaseMovement {
     val sum = exps.sum
     exps.map(_ / sum)
   }
-  override protected def movementLogic(): Point3D = {
+  override protected def movementLogic() = {
 
     val choice = consensusWithPreferences(localRandomPreferences,
       id => if(id == 1) 1 else 0.01 //_ => 0.01

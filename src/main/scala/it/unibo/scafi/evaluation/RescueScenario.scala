@@ -99,7 +99,7 @@ class RescueScenario extends BaseMovement {
         .run(leading)
     }
 
-  override protected def movementLogic(): Point3D = {
+  override protected def movementLogic() = {
     val obstacles = excludingSelf.reifyField((nbr(node.getOption[Boolean]("obstacle").isDefined), nbrVector()))
     val obstaclesPerceived = obstacles.filter(_._2._1).values.map(_._2).toSeq
     branch(node.getOption("obstacle").isDefined) {

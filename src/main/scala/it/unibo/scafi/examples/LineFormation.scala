@@ -6,7 +6,7 @@ import it.unibo.scafi.space.pimp.PimpPoint3D
 import scala.language.postfixOps
 
 class LineFormation extends BaseMovement {
-  override protected def movementLogic(): Point3D = {
+  override protected def movementLogic(): Actuation = {
     val leader = mid() == 1
     val targetDistance = 40
     val confidence = 5
