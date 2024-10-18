@@ -105,7 +105,7 @@ File(rootProject.rootDir.path + "/src/main/yaml").listFiles()
                 """
                     launcher: {
                         parameters: {
-                            batch: [ random ],
+                            batch: [ random, fail_probability ],
                             showProgress: true,
                             autoStart: true,
                             parallelism: $threadCount,

@@ -1,12 +1,13 @@
 package it.unibo.alchemist.loader.`export`.extractors
 
 import it.unibo.alchemist.boundary.Extractor
+import it.unibo.alchemist.model.molecules.SimpleMolecule
 import it.unibo.alchemist.model.{Actionable, Environment, Position2D, Time}
 
 import java.util
-import scala.jdk.CollectionConverters.CollectionHasAsScala
+import scala.jdk.CollectionConverters.{CollectionHasAsScala, IteratorHasAsScala}
 
-class VerticalDeviationExtractor(val centerId: Int) extends Extractor[Double] {
+class VerticalDeviationExtractor(val initialCenterId: Int) extends Extractor[Double] {
   override def getColumnNames: util.List[String] = util.List.of("deviation[mean]", "deviation[std]")
 
   override def extractData[T](
@@ -17,6 +18,12 @@ class VerticalDeviationExtractor(val centerId: Int) extends Extractor[Double] {
                              ): util.Map[String, Double] = {
     type EnvironmentType = Environment[T, Position2D[_]]
     val typeEnvironment = environment.asInstanceOf[EnvironmentType]
+    val centerId = environment.getNodes
+      .iterator()
+      .asScala
+      .filter(node => node.getConcentration(new SimpleMolecule("lead")).asInstanceOf[Boolean])
+      .collectFirst({ case node => node.getId })
+      .getOrElse(initialCenterId)
     val center = typeEnvironment.getNodeByID(centerId)
     val others = typeEnvironment.getNodes.asScala.filterNot(_ == center)
     val positions = others.map(node => typeEnvironment.getPosition(node))

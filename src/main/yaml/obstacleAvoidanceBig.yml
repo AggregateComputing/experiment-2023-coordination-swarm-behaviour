@@ -9,6 +9,9 @@ variables:
   range: &range
     formula: 75
 
+  fail_probability: &fail_probability
+    type: ArbitraryVariable
+    parameters: [ 0.0, [ 0.0 ] ]
 _constants:
   grain: &grain 500.0
   retentionTime: &retentionTime 5.0

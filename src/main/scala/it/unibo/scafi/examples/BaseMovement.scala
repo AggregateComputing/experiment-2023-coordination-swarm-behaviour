@@ -65,6 +65,8 @@ trait BaseMovement
     node.put("speed", speed)
     node.put("velocity", adjustedDirection)
     node.put("destination", target)
-
+  }
+  override def log(key: String, data: Any): Unit = {
+    node.put(key, data)
   }
 }

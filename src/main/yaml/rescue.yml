@@ -3,11 +3,18 @@ incarnation: scafi
 variables:
   random: &random
     min: 0
-    max: 63
+    max: 31
     step: 10
     default: 20
   range: &range
     formula: 100
+  fail_probability: &fail_probability
+    type: ArbitraryVariable
+    parameters: [ 0.0, [ 0.0, 0.2, 0.4, 0.7 ] ]
+  send: &send
+    formula: >
+      "send;" + fail_probability
+    language: scala
 
 _constants:
   retentionTime: &retentionTime 5.0
@@ -36,7 +43,7 @@ _reactions:
       actions:
         - type: RunScafiProgram
           parameters: [it.unibo.scafi.evaluation.RescueScenario, *retentionTime]
-    - program: send
+    - program: *send
   - move: &move
     - time-distribution:
         type: DiracComb

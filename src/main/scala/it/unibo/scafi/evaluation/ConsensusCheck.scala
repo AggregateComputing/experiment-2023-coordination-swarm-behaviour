@@ -17,7 +17,6 @@ class ConsensusCheck extends BaseMovement {
   )
 
   def generateRandomPreferences(choices: Int): List[Double] = {
-    val random = new scala.util.Random()
     val preferences = (0 until choices).map(_ => alchemistRandomGen.nextDouble()).toList
     softmaxNormalization(preferences)
   }
@@ -29,8 +28,8 @@ class ConsensusCheck extends BaseMovement {
     val sum = exps.sum
     exps.map(_ / sum)
   }
-  override protected def movementLogic() = {
 
+  override protected def movementLogic() = {
     val choice = consensusWithPreferences(localRandomPreferences,
       id => if(id == 1) 1 else 0.01 //_ => 0.01
     )

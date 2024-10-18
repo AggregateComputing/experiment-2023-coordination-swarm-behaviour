@@ -6,6 +6,10 @@ import it.unibo.scafi.space.Point3D
 class CircleFormation extends BaseMovement {
 
   val confidence = 5
-  val id = 24
-  override protected def movementLogic() = centeredCircle(id == mid(), sense[java.lang.Double]("circle").doubleValue(), confidence, Point3D.Zero)
+  lazy val leaderId = sense[Integer]("leader")
+  override protected def movementLogic() = {
+    val lead = leaderId == mid()
+    node.put("lead", lead)
+    centeredCircle(leaderId == mid(), sense[java.lang.Double]("circle").doubleValue(), confidence, Point3D.Zero)
+  }
 }

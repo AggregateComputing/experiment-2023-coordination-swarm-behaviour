@@ -51,7 +51,7 @@ sealed class ScafiIncarnation[T, P <: Position[P]] extends Incarnation[T, P] {
     node,
     message = s"The node must have a ${classOf[ScafiDevice[_]].getSimpleName} property",
     body = device => {
-      if (param == "send") {
+      if (param.toString.contains("send")) {
         val alreadyConfigured = ScafiIncarnationUtils
           .allActions[T, P, SendScafiMessage[T, P]](node, classOf[SendScafiMessage[T, P]])
           .map(_.program)
@@ -69,12 +69,19 @@ sealed class ScafiIncarnation[T, P <: Position[P]] extends Incarnation[T, P] {
             ].getName + " action: " + scafiProgramsList
           )
         }
+        val probabilityDrop =
+          Option(param.toString.split(";"))
+            .filter(_.length > 1)
+            .map(_.last)
+            .map(_.toDouble)
+            .getOrElse(0.0)
         new SendScafiMessage[T, P](
           environment,
           device,
           reaction.asInstanceOf[Reaction[T]],
           randomGenerator,
-          scafiProgramsList.head
+          scafiProgramsList.head,
+          probabilityDrop
         )
       } else {
         require(param != null, "Unsupported program: null")
@@ -155,7 +162,7 @@ sealed class ScafiIncarnation[T, P <: Position[P]] extends Incarnation[T, P] {
       parameters: Any
   ): Reaction[T] = {
     val parameterString = Option(parameters).map(_.toString).orNull
-    val isSend = "send".equalsIgnoreCase(parameterString)
+    val isSend = parameterString.contains("send")
     val result: Reaction[T] =
       if (isSend) {
         new ChemicalReaction[T](

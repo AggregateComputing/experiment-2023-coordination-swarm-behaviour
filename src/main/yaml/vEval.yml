@@ -3,13 +3,20 @@ incarnation: scafi
 variables:
   random: &random
     min: 0
-    max: 16
+    max: 15
     step: 1
     default: 2
   range: &range
     formula: 350
   leader: &leader
     formula: 24
+  fail_probability: &fail_probability
+    type: ArbitraryVariable
+    parameters: [ 0.0, [ 0.0, 0.2, 0.4, 0.7 ] ]
+  send: &send
+    formula: >
+      "send;" + fail_probability
+    language: scala
 
 _constants:
   grain: &grain 500.0
@@ -34,7 +41,7 @@ _reactions:
       actions:
         - type: RunScafiProgram
           parameters: [it.unibo.scafi.evaluation.VPatternFormation, *retentionTime]
-    - program: send
+    - program: *send
   - move: &move
     - time-distribution:
         type: DiracComb
@@ -57,6 +64,8 @@ deployments:
     concentration: *leader
   - molecule: speed
     concentration: 1.0
+  - molecule: lead
+    concentration: false
 
 export:
   - type: PositionExporter

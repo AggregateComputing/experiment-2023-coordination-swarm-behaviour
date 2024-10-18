@@ -233,6 +233,8 @@ trait LeaderBasedMovement[E <: MacroSwarmSupport.Dependency] {
       with CustomSpawn
       with BlocksWithGC
       with BlocksWithShare =>
+
+    def log(key: String, data: Any): Unit = {}
     type AllocationStrategy = (List[(ID, Point3D)], List[Point3D]) => Map[ID, Point3D]
 
     /** Creates a line shape. The leader is responsible for the shape. The nodes are placed in a line with a distance
@@ -407,7 +409,7 @@ trait LeaderBasedMovement[E <: MacroSwarmSupport.Dependency] {
 
       val suggestions =
         branch(leader)(suggestionFunction(orderedNodesList))(Map.empty[ID, Point3D])
-
+      ("suggestions", suggestions)
       mux(leader)(leaderVelocity) {
         val direction =
           broadcastAlongWithShare(potential, suggestions, nbrRange).getOrElse(mid().asInstanceOf[ID], Point3D.Zero)
@@ -433,18 +435,25 @@ trait LeaderBasedMovement[E <: MacroSwarmSupport.Dependency] {
     private def distanceBasedAllocation(nodes: List[(ID, Point3D)], positions: List[Point3D]): Map[ID, Point3D] = {
       var toBeAllocated = nodes.toMap
       var allocations = Map.empty[ID, Point3D]
+      var suggested = Map.empty[ID, Point3D]
       positions.zipWithIndex.foreach { case (desired, i) =>
         val (id, _) = toBeAllocated.minBy { case (_, v) => (v + desired).module }
+        suggested += id -> desired
         allocations += id -> (desired + toBeAllocated(id))
         toBeAllocated -= id
       }
+      log("suggestions", suggested)
       allocations
     }
 
     private def idBasedAllocation(nodes: List[(ID, Point3D)], positions: List[Point3D]): Map[ID, Point3D] = {
-      nodes.zipWithIndex.map { case ((id, v), i) =>
+      var suggested = Map.empty[ID, Point3D]
+      val results = nodes.zipWithIndex.map { case ((id, v), i) =>
+        suggested += id -> positions(i)
         id -> (positions(i) + v)
       }.toMap
+      log("suggestions", suggested)
+      results
     }
 
   }
