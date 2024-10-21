@@ -8,7 +8,7 @@ import it.unibo.scafi.space.Point3D
 import java.util
 import scala.jdk.CollectionConverters.{IteratorHasAsScala, ListHasAsScala}
 
-class CorrectPositionExtractor() extends Extractor[Double] {
+class CorrectPositionExtractor extends Extractor[Double] {
   override def getColumnNames: util.List[String] = util.List.of("errors")
   override def extractData[T](
       environment: Environment[T, _],
@@ -36,9 +36,11 @@ class CorrectPositionExtractor() extends Extractor[Double] {
           val suggested = typedEnv.makePosition(pos.x + leaderPosition.getX, pos.y + leaderPosition.getY)
           math.sqrt(math.pow(nodePosition.getX - suggested.getX, 2) + math.pow(nodePosition.getY - suggested.getY, 2))
         }
-        java.util.Map.of("errors", errorWithRespectToTask.count(_ > 5).toDouble)
+        println(requestedPosition.size)
+        java.util.Map.of("errors", errorWithRespectToTask.count(_ > 10).toDouble)
       case None =>
         java.util.Map.of("errors", 0.0)
     }
   }
+
 }

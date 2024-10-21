@@ -1,11 +1,13 @@
 package it.unibo.scafi.examples
 
-import it.unibo.alchemist.model.Position
+import it.unibo.alchemist.model.{Environment, Position, Position2D}
 import it.unibo.alchemist.model.scafi.ScafiIncarnationForAlchemist.ScafiAlchemistSupport
 import it.unibo.scafi.macroswarm.MacroSwarmAlchemistSupport._
 import it.unibo.scafi.macroswarm.MacroSwarmAlchemistSupport.incarnation._
 import it.unibo.scafi.space.Point3D
 import it.unibo.scafi.space.pimp.PimpPoint3D
+
+import scala.jdk.CollectionConverters.ListHasAsScala
 
 trait Actuation
 case class MoveTo(destination: Point3D) extends Actuation {
@@ -66,7 +68,19 @@ trait BaseMovement
     node.put("velocity", adjustedDirection)
     node.put("destination", target)
   }
-  override def log(key: String, data: Any): Unit = {
+  override def log(key: String, data: Any): Unit =
     node.put(key, data)
+
+  override def allPosition(center: Int): List[(Int, Point3D)] = {
+    type TypedEnvironment = Environment[Any, Position2D[_]]
+    val typed = alchemistEnvironment.asInstanceOf[TypedEnvironment]
+    val nodes = typed.getNodes.asScala
+    val center = typed.getPosition(alchemistEnvironment.getNodeByID(mid()))
+    nodes
+      .map(node => node.getId -> typed.getPosition(node))
+      .map(pair => pair._1 -> Point3D(center.getX - pair._2.getX, center.getY - pair._2.getY, 0))
+      .toList
+      .filter(_._1 != mid())
+      .sortBy(_._1)
   }
 }
