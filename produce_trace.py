@@ -2,12 +2,12 @@
 import numpy as np
 import json
 import matplotlib.pyplot as plt
-
+import re
 ## Get all file from a folder passed via main and with a certain pattern
 import glob
 import os
 import sys
-
+import functools
 plt.rcParams.update({'font.size': 35})
 # Get the path from the command line
 path = sys.argv[1]
@@ -38,10 +38,21 @@ for file in files:
     file_name = os.path.basename(file)
 
     # Get the experiment name
-    experiment_name = file_name.split("-")[0]
+    experiment_names = file_name.split("-")
+    # capture this pattern: [experiment_name]-random.[number]_fail_probability-[fail_number]_kill_percentage-[fail_number].json
 
-    # Add the file to the map as json
+    match = re.match(r"(.+)-random-(.+?)_fail_probability-(.+?)_kill_percentage-(.+?)_perception_error-(.+?)\.json", file_name)
+    if match is None:
+        continue
+    others_values = match.groups()[2:]
+    ## check if any value is != '0.0'
+    check_if_different = [value != '0.0' for value in others_values]
+    some_not_zero = functools.reduce(lambda x, y: x or y, check_if_different)
+    if some_not_zero:
+        continue
+    experiment_name = match.group(1)
     with open(file) as json_file:
+        print("Reading file", file)
         json_data = json_file.read()
         json_data = json.loads(json_data)
         if experiment_name in files_map:
@@ -60,10 +71,10 @@ def plot_experiment(experiment_name, experiment, crop=500):
         x_values = [position[0] for position in positions[::-1][:crop]]
         y_values = [position[1] for position in positions[::-1][:crop]]
         # Number of segments for each trajectory
-        num_segments = len(x_values) - 1
+        num_segments = len(x_values) - 11
 
         # Plotting each segment with a different color
-        for i in range(num_segments):
+        for i in range(0, num_segments, 10):
             ## get color from the drone id using hue
             ## https://matplotlib.org/stable/gallery/color/named_colors.html
             hue = int(drone_id) * 3
@@ -74,12 +85,15 @@ def plot_experiment(experiment_name, experiment, crop=500):
             # Plotting the segment
             ## change the linewidth based on the index of the segment
             linewidth = 3
-            if(i == num_segments - 1):
-                linewidth = 0.1
-                plt.scatter(x_values[i], y_values[i], color=color, linewidth=linewidth)
-            else:
-                plt.plot(x_values[i:i+2], y_values[i:i+2], color=color, linewidth=linewidth)
 
+            #if(i == num_segments - 1):
+            #    linewidth = 0.1
+            #    plt.scatter(x_values[i], y_values[i], color=color, linewidth=linewidth)
+            #else:
+            #plt.scatter(x_values[i], y_values[i], color=color, linewidth=linewidth, alpha=0.1)
+            plt.plot(x_values[i:i+10], y_values[i:i+10], color=color, linewidth=linewidth)
+
+        plt.scatter(x_values[-1], y_values[-1], color=color, s=20, edgecolors='black', linewidth=0.5)
     # Adding title and labels
     plt.title(name_map[experiment_name])
     plt.xlabel('X Coordinate')
@@ -89,7 +103,7 @@ def plot_experiment(experiment_name, experiment, crop=500):
     ## tigh layout
     plt.tight_layout()
     # Show the plot
-    plt.savefig(os.path.join(charts_folder, experiment_name + ".pdf"))
+    plt.savefig(os.path.join(charts_folder, experiment_name + ".png"))
 
 
 def average_experiments(experiments):
@@ -108,4 +122,4 @@ def average_experiments(experiments):
 
 for experiment_name, experiments in files_map.items():
     print("Plotting experiment", experiment_name)
-    plot_experiment(experiment_name, average_experiments(experiments))
+    plot_experiment(experiment_name, average_experiments(experiments), 400)
