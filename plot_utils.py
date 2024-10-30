@@ -5,7 +5,9 @@ import seaborn as sns
 import pandas as pd
 import os
 sns.set()
-sns.set_context("paper")
+sns.set_theme(style='white')
+
+#sns.set_context("paper")
 def distance(val, ref):
     return abs(ref - val)
 vectDistance = np.vectorize(distance)
@@ -305,10 +307,30 @@ def run_chart_generation(directory, output_directory, experiments, floatPrecisio
         return (means, stdevs)
     # QUICK CHARTING
 
-    import matplotlib
-    import matplotlib.pyplot as plt
-    import matplotlib.cm as cmx
+
     #matplotlib.rcParams.update({'axes.titlesize': 12})
     #matplotlib.rcParams.update({'axes.labelsize': 10})
 
     return eval_data(minTime, maxTime)
+
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.cm as cmx
+def plot_chart(means, stds, drop_probabilities, kill_percentages, perception_errors, convert_name, ylabel, title_suffix, filename_suffix):
+    for perception_error in perception_errors:
+        for drop_probability in drop_probabilities:
+            for kill_percentage in kill_percentages:
+                for label in means:
+                    ds = means[label].sel(fail_probability=drop_probability, kill_percentage=kill_percentage, perception_error=perception_error)
+                    std = stds[label].sel(fail_probability=drop_probability, kill_percentage=kill_percentage, perception_error=perception_error)
+                    plt.fill_between(ds['time'], ds[ylabel] - std[ylabel], ds[ylabel] + std[ylabel], alpha=0.4)
+                    plt.plot(ds['time'], ds[ylabel], label=convert_name[label])
+
+                plt.xlabel('Time')
+                plt.ylabel(ylabel.replace('[mean]', ''))
+                plt.title(f'${title_suffix} - D: {drop_probability} - K: {kill_percentage} - P: {perception_error}$')
+                plt.legend(fontsize=17, title_fontsize=20)
+                plt.grid(True)
+                plt.tight_layout()
+                plt.savefig(f'charts/{title_suffix}Chart-{filename_suffix}-{drop_probability}-{kill_percentage}-{perception_error}.pdf')
+                plt.close()

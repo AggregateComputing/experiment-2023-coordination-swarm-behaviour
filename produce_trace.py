@@ -11,7 +11,8 @@ import functools
 plt.rcParams.update({'font.size': 35})
 # Get the path from the command line
 path = sys.argv[1]
-
+noise = sys.argv[2]
+fail = sys.argv[3]
 # Get all files from the folder
 files = glob.glob(os.path.join(path, "*.json"))
 # Store in "charts" folder
@@ -44,11 +45,14 @@ for file in files:
     match = re.match(r"(.+)-random-(.+?)_fail_probability-(.+?)_kill_percentage-(.+?)_perception_error-(.+?)\.json", file_name)
     if match is None:
         continue
+
     others_values = match.groups()[2:]
     ## check if any value is != '0.0'
-    check_if_different = [value != '0.0' for value in others_values]
-    some_not_zero = functools.reduce(lambda x, y: x or y, check_if_different)
-    if some_not_zero:
+    if others_values[1] != '0.0':
+        continue
+    if others_values[2] != noise:
+        continue
+    if others_values[0] != fail:
         continue
     experiment_name = match.group(1)
     with open(file) as json_file:
@@ -103,7 +107,7 @@ def plot_experiment(experiment_name, experiment, crop=500):
     ## tigh layout
     plt.tight_layout()
     # Show the plot
-    plt.savefig(os.path.join(charts_folder, experiment_name + ".png"))
+    plt.savefig(os.path.join(charts_folder, experiment_name + f"-{noise}-{fail}.pdf"))
 
 
 def average_experiments(experiments):
@@ -122,4 +126,5 @@ def average_experiments(experiments):
 
 for experiment_name, experiments in files_map.items():
     print("Plotting experiment", experiment_name)
-    plot_experiment(experiment_name, average_experiments(experiments), 400)
+    #plot_experiment(experiment_name, average_experiments(experiments), 400)
+    plot_experiment(experiment_name, experiments[0], 400)

@@ -6,6 +6,7 @@ matplotlib.rcParams.update({'xtick.labelsize': 18})
 matplotlib.rcParams.update({'ytick.labelsize': 18})
 import matplotlib.pyplot as plt
 ## increase the font size
+
 if __name__ == '__main__':
     (means, stds) = run_chart_generation(
         'data',
@@ -16,29 +17,17 @@ if __name__ == '__main__':
         'time',
         ['random'],
         100,
-        1200
+        4000
     )
     convert_name = {
         'vEval': 'v shape=45°',
         'vEval30': 'v shape=30°',
         'vEval60': 'v shape=60°',
     }
-    for label in means:
-        ds = means[label]
-        std = stds[label]
-        plt.fill_between(
-            ds['time'], 
-            ds['angle[mean]'] - std['angle[mean]'],  
-            ds['angle[mean]'] + std['angle[mean]'], 
-            alpha=0.4,
-        )
-        plt.plot(ds['time'], ds['angle[mean]'], label=convert_name[label])
+    drop_probabilities = [0.0, 0.1, 0.2, 0.4, 0.7]
+    kill_percentages = [0.0, 0.1, 0.2, 0.3]
+    perception_errors = [0.0, 5.0, 10.0]
 
-    plt.xlabel('Time')
-    plt.ylabel('Average angle')
-    plt.title('V-shape')
-    plt.legend(fontsize=17, title_fontsize=20)
-    plt.grid(True)
-    plt.tight_layout()
-    plt.savefig('charts/vSpaceEval.pdf')
+    plot_chart(means, stds, drop_probabilities, kill_percentages, perception_errors,  convert_name, 'errors', 'V', 'errors')
+    plot_chart(means, stds, drop_probabilities, kill_percentages, perception_errors,  convert_name, 'angle[mean]', 'V', 'vertical')
         

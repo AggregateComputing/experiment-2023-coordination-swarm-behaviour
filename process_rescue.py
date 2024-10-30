@@ -5,7 +5,7 @@ import seaborn as sns
 import pandas as pd
 import os
 sns.set()
-sns.set_context("paper")
+sns.set_theme(style='white')
 def distance(val, ref):
     return abs(ref - val)
 vectDistance = np.vectorize(distance)
@@ -198,7 +198,7 @@ if __name__ == '__main__':
     timeColumnName = 'time'
     logarithmicTime = False
     # One or more variables are considered random and "flattened"
-    seedVars = ['random']
+    seedVars = ['random', 'kill_percentage']
     # Label mapping
     class Measure:
         def __init__(self, description, unit = None):
@@ -368,14 +368,35 @@ if __name__ == '__main__':
     current_experiment_errors = stdevs['rescue'].fillna(0.0)
     if(not os.path.exists("charts")):
         os.makedirs("charts")
-    ax = produce_chart(current_experiment_means, current_experiment_errors, "minDistance[min]")
-    finalise_fig(ax, "min_distance")
-    ax = produce_chart(current_experiment_means, current_experiment_errors, "inDanger", palette[1:])
-    finalise_fig(ax, "in_danger")
-    maxTime = 120
+
+    probabilities = [0.0, 0.1, 0.2, 0.4, 0.7]
+    perception_errors = [0.0, 5.0, 10.0]
+    for perception_error in perception_errors:
+        for p in probabilities:
+            ax = produce_chart(
+                current_experiment_means.sel(fail_probability=p, perception_error=perception_error),
+                current_experiment_errors.sel(fail_probability=p, perception_error=perception_error),
+                "minDistance[min]"
+            )
+            finalise_fig(ax, f"min_distance_{p}_{perception_error}")
+            ax = produce_chart(
+                current_experiment_means.sel(fail_probability=p, perception_error=perception_error),
+                current_experiment_errors.sel(fail_probability=p, perception_error=perception_error),
+                "inDanger", palette[1:]
+            )
+            finalise_fig(ax, f"in_danger_{p}_{perception_error}")
+    maxTime = 200
     eval_data()
-    current_experiment_means = means['rescue'].fillna(0.0)
-    current_experiment_errors = stdevs['rescue'].fillna(0.0)
-    ax = produce_chart(current_experiment_means, current_experiment_errors, "avgDistanceTeam[mean]", palette[2:])
-    finalise_fig(ax, "average_intra_team_distance")
+
+    for perception_error in perception_errors:
+        for p in probabilities:
+            current_experiment_means = means['rescue'].fillna(0.0)
+            current_experiment_errors = stdevs['rescue'].fillna(0.0)
+            ax = produce_chart(
+                current_experiment_means.sel(fail_probability=p, perception_error=perception_error),
+                current_experiment_errors.sel(fail_probability=p, perception_error=perception_error),
+                "avgDistanceTeam[mean]", palette[2:]
+            )
+            finalise_fig(ax, f"average_intra_team_distance_{p}_{perception_error}")
+
 # Custom charting

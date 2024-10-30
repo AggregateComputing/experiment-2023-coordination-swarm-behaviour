@@ -16,7 +16,6 @@ dependencies {
     // Check the catalog at gradle/libs.versions.gradle
     implementation(libs.bundles.alchemist)
     implementation(libs.bundles.scalacache)
-
     implementation("it.unibo.scafi:macro-swarm-core_2.13:1.5.0")
     implementation("com.lihaoyi:upickle_2.13:3.1.3")
 }
@@ -43,7 +42,7 @@ val heap: Long = maxHeap ?: if (System.getProperty("os.name").toLowerCase().cont
 }
 val taskSizeFromProject: Int? by project
 val taskSize = taskSizeFromProject ?: 512
-val threadCount = maxOf(1, minOf(Runtime.getRuntime().availableProcessors(), heap.toInt() / taskSize))
+val threadCount = 20 //maxOf(1, minOf(Runtime.getRuntime().availableProcessors(), heap.toInt() / taskSize))
 
 val alchemistGroup = "Run Alchemist"
 /*
@@ -105,7 +104,7 @@ File(rootProject.rootDir.path + "/src/main/yaml").listFiles()
                 """
                     launcher: {
                         parameters: {
-                            batch: [ random, fail_probability ],
+                            batch: [ random, fail_probability, kill_percentage, perception_error ],
                             showProgress: true,
                             autoStart: true,
                             parallelism: $threadCount,

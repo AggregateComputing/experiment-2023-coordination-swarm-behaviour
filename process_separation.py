@@ -15,29 +15,18 @@ if __name__ == '__main__':
         'time',
         ['random'],
         100,
-        1200
+        4000
     )
     convert_name = {
         'separationEval': 'separation=60m',
         'separationEval30': 'separation=30m',
         'separationEval120': 'separation=120m',
     }
-    for label in means:
-        ds = means[label]
-        std = stds[label]
-        plt.fill_between(
-            ds['time'], 
-            ds['distance[mean]'] - std['distance[mean]'],
-            ds['distance[mean]'] + std['distance[mean]'],
-            alpha=0.4,
-        )
-        plt.plot(ds['time'], ds['distance[mean]'], label=convert_name[label])
-    
-    plt.xlabel('Time')
-    plt.ylabel('Average distance')
-    plt.title('Separation')
-    plt.legend(fontsize=17, title_fontsize=20)
-    plt.grid(True)
-    plt.tight_layout()
-    plt.savefig('charts/separationEvalChart.pdf')
+
+    drop_probabilities = [0.0, 0.1, 0.2, 0.4, 0.7]
+    kill_percentages = [0.0, 0.1, 0.2, 0.3]
+    perception_errors = [0.0, 5.0, 10.0]
+    #plot_chart(means, stds, drop_probabilities, kill_percentages, convert_name, 'errors', 'Separation', 'errors')
+    print(means)
+    plot_chart(means, stds, drop_probabilities, kill_percentages, perception_errors, convert_name, 'distance[mean]', 'Separation', 'distance')
         
