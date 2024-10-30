@@ -1,7 +1,6 @@
 package it.unibo.alchemist.loader.`export`.extractors
 
 import it.unibo.alchemist.boundary.Extractor
-import it.unibo.alchemist.model
 import it.unibo.alchemist.model.molecules.SimpleMolecule
 import it.unibo.alchemist.model.{Actionable, Environment, Position2D, Time}
 

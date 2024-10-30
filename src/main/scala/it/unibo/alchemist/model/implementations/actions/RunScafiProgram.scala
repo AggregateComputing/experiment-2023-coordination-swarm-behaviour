@@ -54,7 +54,8 @@ sealed class RunScafiProgram[T, P <: Position[P]](
     reaction: Reaction[T],
     randomGenerator: RandomGenerator,
     programName: String,
-    retentionTime: Double
+    retentionTime: Double,
+    val noiseSensor: Double = 0.0
 ) extends AbstractLocalAction[T](node) {
 
   def this(
@@ -94,13 +95,24 @@ sealed class RunScafiProgram[T, P <: Position[P]](
 
   override def execute(): Unit = {
     import scala.jdk.CollectionConverters._
+    randomGenerator.nextGaussian()
 
     implicit def euclideanToPoint(point: P): Point3D = point.getDimensions match {
       case 1 => Point3D(point.getCoordinate(0), 0, 0)
       case 2 => Point3D(point.getCoordinate(0), point.getCoordinate(1), 0)
       case 3 => Point3D(point.getCoordinate(0), point.getCoordinate(1), point.getCoordinate(2))
     }
-    val position: P = environment.getPosition(node)
+    val truePosition: P = environment.getPosition(node)
+    val noise = Point3D(
+      randomGenerator.nextGaussian() * noiseSensor,
+      randomGenerator.nextGaussian() * noiseSensor,
+      randomGenerator.nextGaussian() * noiseSensor
+    )
+    val position = environment.makePosition(
+        truePosition.getCoordinate(0) + noise.x,
+        truePosition.getCoordinate(1) + noise.y
+      )
+
     // NB: We assume it.unibo.alchemist.model.Time = DoubleTime
     //     and that its "time unit" is seconds, and then we get NANOSECONDS
     val alchemistCurrentTime = Try(environment.getSimulation)

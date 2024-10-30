@@ -16,7 +16,14 @@ variables:
     formula: 120.0
   fail_probability: &fail_probability
     type: ArbitraryVariable
-    parameters: [ 0.0, [ 0.0, 0.1, 0.2, 0.4 ] ]
+    parameters: [ 0.0, [ 0.0, 0.1, 0.2, 0.4, 0.7 ] ]
+  kill_percentage: &kill_percentage
+    type: ArbitraryVariable
+    parameters: [ 0.0, [ 0.0, 0.1, 0.2, 0.3 ] ]
+
+  perception_error: &perception_error
+    type: ArbitraryVariable
+    parameters: [ 0.0, [ 0.0, 1.0, 5.0, 10.0 ] ]
   send: &send
     formula: >
       "send;" + fail_probability
@@ -29,6 +36,12 @@ _constants:
 environment:
   type: Continuous2DEnvironment
   parameters: []
+  global-programs:
+    - time-distribution:
+        type: Trigger
+        parameters: [ 2000 ]
+      type: RandomlyKillAgents
+      parameters: [ *kill_percentage ]
 
 seeds:
   scenario: *random
@@ -44,7 +57,7 @@ _reactions:
       type: Event
       actions:
         - type: RunScafiProgram
-          parameters: [it.unibo.scafi.evaluation.LeaderBasedSeparation, *retentionTime]
+          parameters: [it.unibo.scafi.evaluation.LeaderBasedSeparation, *retentionTime, *perception_error]
     - program: *send
   - move: &move
     - time-distribution:
@@ -75,7 +88,7 @@ deployments:
 
 terminate:
   - type: AfterTime
-    parameters: 2700
+    parameters: 4000
 
 export:
   - type: PositionExporter

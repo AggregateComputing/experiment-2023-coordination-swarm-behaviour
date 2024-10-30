@@ -53,8 +53,8 @@ abstract class AbstractGlobalReaction[T, P <: Position[P]](
 
   // Utilities methods
 
-  def agents = environment.getNodes.iterator().asScala.toList
+  def nodes = environment.getNodes.iterator().asScala.toList
 
-  def managers = agents.map(new SimpleNodeManager[T](_))
+  def managers = nodes.map(new SimpleNodeManager[T](_))
 
 }

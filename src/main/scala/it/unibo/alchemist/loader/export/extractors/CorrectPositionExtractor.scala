@@ -36,7 +36,6 @@ class CorrectPositionExtractor extends Extractor[Double] {
           val suggested = typedEnv.makePosition(pos.x + leaderPosition.getX, pos.y + leaderPosition.getY)
           math.sqrt(math.pow(nodePosition.getX - suggested.getX, 2) + math.pow(nodePosition.getY - suggested.getY, 2))
         }
-        println(requestedPosition.size)
         java.util.Map.of("errors", errorWithRespectToTask.count(_ > 10).toDouble)
       case None =>
         java.util.Map.of("errors", 0.0)

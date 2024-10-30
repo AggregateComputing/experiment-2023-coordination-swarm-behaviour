@@ -256,10 +256,11 @@ trait LeaderBasedMovement[E <: MacroSwarmSupport.Dependency] {
         leader: Boolean,
         distance: Double,
         confidence: Double,
-        leaderVelocity: => Point3D = Point3D.Zero
+        leaderVelocity: => Point3D = Point3D.Zero,
+        allocationStrategy: AllocationStrategy = idBasedAllocation
     ): Point3D = {
-      lineSuggestion(allPosition(mid()), distance, shouldLog = true)
-      formShape(leader, leaderVelocity, lineSuggestion(_, distance), confidence)
+      lineSuggestion(allPosition(mid()), distance, allocationStrategy, shouldLog = true)
+      formShape(leader, leaderVelocity, lineSuggestion(_, distance, allocationStrategy), confidence)
     }
 
     private def lineSuggestion(
@@ -309,10 +310,11 @@ trait LeaderBasedMovement[E <: MacroSwarmSupport.Dependency] {
         leader: Boolean,
         radius: Double,
         confidence: Double,
-        leaderVelocity: => Point3D = Point3D.Zero
+        leaderVelocity: => Point3D = Point3D.Zero,
+        allocationStrategy: AllocationStrategy = idBasedAllocation
     ): Point3D = {
-      circleShapePolicy(allPosition(mid), radius, shouldLog = true)
-      formShape(leader, leaderVelocity, circleShapePolicy(_, radius), confidence)
+      circleShapePolicy(allPosition(mid), radius, allocationStrategy, shouldLog = true)
+      formShape(leader, leaderVelocity, circleShapePolicy(_, radius, allocationStrategy), confidence)
     }
 
     private def circleShapePolicy(
@@ -363,10 +365,16 @@ trait LeaderBasedMovement[E <: MacroSwarmSupport.Dependency] {
         distance: Double,
         radius: Double,
         confidence: Double,
-        leaderVelocity: Point3D = Point3D.Zero
+        leaderVelocity: Point3D = Point3D.Zero,
+        allocationStrategy: AllocationStrategy = idBasedAllocation
     ): Point3D = {
-      vShapeSuggestions(allPosition(mid()), distance, radius, oldVelocity, shouldLog = true)
-      formShape(leader, leaderVelocity, vShapeSuggestions(_, distance, radius, oldVelocity), confidence)
+      vShapeSuggestions(allPosition(mid()), distance, radius, oldVelocity, allocationStrategy, shouldLog = true)
+      formShape(
+        leader,
+        leaderVelocity,
+        vShapeSuggestions(_, distance, radius, oldVelocity, allocationStrategy),
+        confidence
+      )
     }
 
     def vShapeSuggestions(

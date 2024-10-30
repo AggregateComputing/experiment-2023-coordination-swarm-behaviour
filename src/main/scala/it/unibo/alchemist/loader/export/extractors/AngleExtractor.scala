@@ -21,7 +21,7 @@ class AngleExtractor(val initialCenterId: Int) extends Extractor[Double] {
       .iterator()
       .asScala
       .filter(node => node.getConcentration(new SimpleMolecule("lead")).asInstanceOf[Boolean])
-      .collectFirst({ case node => node.getId })
+      .collectFirst { case node => node.getId }
       .getOrElse(initialCenterId)
     val center = typeEnvironment.getNodeByID(centerId)
     val others = typeEnvironment.getNodes.asScala.filterNot(_ == center)
@@ -32,8 +32,9 @@ class AngleExtractor(val initialCenterId: Int) extends Extractor[Double] {
       val y = position.getY - centerPosition.getY
       Math.atan2(y, x)
     }
-    val (left, right) = angles.map(Math.toDegrees).map(_ * -1).span(_ < 90)
-    val fixedAngles = left ++ right.map(180 - _)
+    val mapped = angles.map(Math.toDegrees).map(_ * -1).groupBy(_ < 90)
+    val (left, right) = (mapped.getOrElse(true, List.empty), mapped.getOrElse(false, List.empty))
+    val fixedAngles = left ++ right.map(a => 360 - (a + 180))
     val mean = fixedAngles.sum / angles.size
     val std = Math.sqrt(fixedAngles.map(a => Math.pow(a - mean, 2)).sum / angles.size)
     java.util.Map.of("angle[mean]", mean, "angle[std]", std)

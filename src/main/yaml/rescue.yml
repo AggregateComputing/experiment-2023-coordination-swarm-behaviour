@@ -4,13 +4,21 @@ variables:
   random: &random
     min: 0
     max: 31
-    step: 10
+    step: 1
     default: 20
   range: &range
     formula: 100
   fail_probability: &fail_probability
     type: ArbitraryVariable
-    parameters: [ 0.0, [ 0.0, 0.1, 0.2, 0.4 ] ]
+    parameters: [ 0.0, [ 0.0, 0.1, 0.2, 0.4, 0.7 ] ]
+  kill_percentage: &kill_percentage
+    type: ArbitraryVariable
+    parameters: [ 0.0, [ 0.0 ] ]
+
+  perception_error: &perception_error
+    type: ArbitraryVariable
+    parameters: [ 0.0, [ 0.0, 1.0, 5.0, 10.0 ] ]
+
   send: &send
     formula: >
       "send;" + fail_probability
@@ -42,7 +50,7 @@ _reactions:
       type: Event
       actions:
         - type: RunScafiProgram
-          parameters: [it.unibo.scafi.evaluation.RescueScenario, *retentionTime]
+          parameters: [it.unibo.scafi.evaluation.RescueScenario, *retentionTime, *perception_error]
     - program: *send
   - move: &move
     - time-distribution:

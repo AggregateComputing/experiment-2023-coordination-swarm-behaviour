@@ -9,6 +9,6 @@ class LineFormation extends BaseMovement {
   override protected def movementLogic(): Actuation = {
     val lead = leaderId == mid()
     node.put("lead", lead)
-    line(lead, distance, 5, Point3D(0, 0.0, 0))
+    line(lead, distance, 2, Point3D(0, 0.0, 0))
   }
 }

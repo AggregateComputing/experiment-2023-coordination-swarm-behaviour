@@ -79,6 +79,7 @@ class RescueScenario extends BaseMovement {
 
   def insideTeamPlanning(team: Team): Point3D =
     team.insideTeam { k =>
+      node.put("team", k)
       val leading = k == mid()
       val potential = fastGradient(leading, nbrRange)
       val inDanger =
@@ -112,17 +113,33 @@ class RescueScenario extends BaseMovement {
       } +
         obstacleAvoidance(obstaclesPerceived, 70, 50)
       val distancesIntraTeam = excludingSelf
-        .reifyField((nbrRange(), nbr(sense[Int]("team"))))
+        .reifyField((nbrRange(), nbr(sense[Integer]("team"))))
         .filter(_._2._2 == mid())
-        .values
-        .map(_._1)
 
+
+      val realDistance =
+        distancesIntraTeam.map {
+          case (id, _) =>
+            val position = alchemistEnvironment.getPosition(alchemistEnvironment.getNodeByID(id)).getCoordinates
+            Point3D(position(0), position(1), 0).distance(currentPosition())
+        }
+
+      val minDistanceToTeam = realDistance.minOption.getOrElse(Double.PositiveInfinity)
+      val maxDistanceToTeam = realDistance.maxOption.getOrElse(Double.NegativeInfinity)
+
+      def distanceInRange(distance: Double): Boolean = distance > circleRadius - confidence * 2 && distance < circleRadius + confidence * 2
+      val averageDistance = distancesIntraTeam.values.map(_._1).sum / distancesIntraTeam.size
       if (healer) {
-        node.put("avgDistanceTeam", distancesIntraTeam.sum / distancesIntraTeam.size)
+        node.put("avgDistanceTeam", averageDistance)
       }
       val minDistance = excludingSelf.reifyField(nbrRange()).minOption.map(_._2).getOrElse(Double.PositiveInfinity)
       node.put("minDistance", minDistance)
-      mux(healer)(velocity)(velocity * 2)
+      val healerVelocity = if(distanceInRange(minDistanceToTeam) && distanceInRange(maxDistanceToTeam)) {
+        velocity
+      } else {
+        velocity / 10.0
+      }
+      mux(healer)(healerVelocity)(velocity * 2)
     }
   }
 
